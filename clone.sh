@@ -35,7 +35,7 @@ curl -Lo protoc.zip "https://github.com/protocolbuffers/protobuf/releases/downlo
 && chmod a+x /usr/local/bin/protoc
 PATH="/usr/local/bin:$PATH"
 rustup target add aarch64-unknown-none-softfloat
-apt install build-essential clang libncurses-dev libssl-dev pkg-config python3-dev gcc-aarch64-linux-gnu libboost-dev libboost-regex-dev libelf-dev cmake libtbb-dev clang-format-11 clang-tidy libc6-dev-arm64-cross libyaml-cpp-dev libgl1-mesa-glx libcapstone-dev ninja-build clang libc++-dev libc++abi-dev
+apt install -y build-essential clang libncurses-dev libssl-dev pkg-config python3-dev gcc-aarch64-linux-gnu libboost-dev libboost-regex-dev libelf-dev cmake libtbb-dev clang-format-11 clang-tidy libc6-dev-arm64-cross libyaml-cpp-dev libgl1-mesa-glx libcapstone-dev ninja-build clang libc++-dev libc++abi-dev
 pip3 install -U pip wheel
 pip3 install -r tekton/build/requirements.txt
 pip3 install fbgemm-gpu-cpu
@@ -43,13 +43,14 @@ pip3 install fbgemm-gpu-cpu
 pip3 install dvc[s3]
 
 
-rm -rf /target/$NAME
 mkdir -p /target/$NAME
+mkdir -p /cache/furiosa-libtorch
+mkdir -p /cache/llm_dfg_cache
 ln -s /target/$NAME target
 ln -s $HOME/scripts z
 ln -s /tmp tmp
-ln -s /cache/furiosa-libtorch artifacts/furiosa-libtorch/.dvc/cache
-ln -s /cache/llm_dfg_cache crates/npu-torch-models/llm_dfg_cache/.dvc/cache
+ln -s /cache/furiosa-libtorch/ artifacts/furiosa-libtorch/.dvc/cache
+ln -s /cache/llm_dfg_cache/ crates/npu-torch-models/llm_dfg_cache/.dvc/cache
 
 
 cargo install cargo-sort --locked
@@ -57,9 +58,10 @@ cargo install cargo-nextest --locked
 cargo use_renegade --release
 
 
+mkdir -p $HOME/.aws
 echo "
 TODO:
-  1. Visit https://aws-cli.furiosa.dev and update $HOME/.aws/credentials
-  2. dvc --cd artifacts/furiosa-libtorch/jammy pull -r origin -j 10
-  3. dvc pull -r origin -j 10
+  1. Update aws credentials from https://aws-cli.furiosa.dev
+  2. dvc --cd $NAME/artifacts/furiosa-libtorch/jammy pull -r origin -j 10
+  3. dvc --cd $NAME pull -r origin -j 10
 "

@@ -9,6 +9,13 @@ git config --global merge.conflictstyle diff3
 git config --global user.name "Dohyun Kim"
 git config --global user.email dohyun.kim@furiosa.ai
 
+if [ ! -d "$HOME/scripts" ]; then
+    git clone https://github.com/dohyunkim-furiosa/scripts
+else
+    echo "$HOME/scripts already exist - clone skipped."
+fi
+chmod +x $HOME/scripts/*
+
 # create softlinks
 rm -rf $HOME/.cache
 mkdir -p /cache
@@ -17,4 +24,4 @@ ln -s /cache $HOME/.cache
 # install
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh #rust
 curl -sS https://starship.rs/install.sh | sh #starship
-echo 'eval "$(starship init bash)"' >> $HOME/.bashrc
+# echo 'eval "$(starship init bash)"' >> $HOME/.bashrc
