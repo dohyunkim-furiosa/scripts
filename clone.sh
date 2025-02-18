@@ -22,7 +22,8 @@ cargo fmt --all -- --check
 cargo clippy --all-targets -- -D warnings
 cargo sort --grouped --check --workspace
 ruff check scripts
-ruff format --check --diff scripts" > .git/hooks/pre-push
+ruff format --check --diff scripts
+" > .git/hooks/pre-push
 chmod u+x .git/hooks/pre-push
 
 rustup default nightly

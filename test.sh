@@ -17,7 +17,7 @@ export LD_LIBRARY_PATH=`pwd`/target/release/deps
 # export NVP_LOG_STDOUT=1
 # export NVP_LOG_PATH=./nvp.log
 # export NVP_CHROME_TRACING=1
-export RUST_LOG=info #tactic_populator=trace,npu_compiler::compile=trace
+export RUST_LOG=info #tactic_populator=trace,npu_compiler::compile=trace,npu_compiler_dma::dma_estimator=debug
 # export RUST_BACKTRACE=1
 ### E2E ###
 # export E2E_TEST_CACHE_STAGE=postlower #[strum(serialize_all = "lowercase")] pub enum FuriosaIrKind 이라서 prelower, postlower, ldfg 처럼 소문자를 써야함
@@ -42,12 +42,6 @@ export RUST_LOG=info #tactic_populator=trace,npu_compiler::compile=trace
 # export MAX_TACTIC_COUNT=5
 # export RAYON_NUM_THREADS=32
 # export PROPTEST_SEED=1234567890
-
-
-##### Update dependancies #####
-# git submodule deinit --all -f
-# git submodule update --recursive --init --force
-# cargo use_renegade -r
 
 
 ##### Debug Script #####

@@ -1,0 +1,10 @@
+[merge]
+	conflictstyle = diff3
+[user]
+	name = Dohyun Kim
+	email = dohyun.kim@furiosa.ai
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential]
+	helper = "!f() { /root/.vscode-server/bin/cd4ee3b1c348a13bafd8f9ad8060705f6d4b9cba/node /tmp/vscode-remote-containers-3adb1ab4-793f-4186-a30a-e97a600d8a6b.js git-credential-helper $*; }; f"
