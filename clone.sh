@@ -59,8 +59,11 @@ cargo install cargo-sort --locked
 cargo install cargo-nextest --locked
 
 mkdir -p $HOME/.aws
+
 echo "
 TODO:
   1. Follow the instructions in https://github.com/furiosa-ai/npu-tools/blob/master/README.md
+    * update aws credential at https://aws-cli.furiosa.dev
+    * `dvc --cd artifacts/furiosa-libtorch/jammy pull -r origin -j 10`
   2. cargo use_renegade -r && cargo build
 "

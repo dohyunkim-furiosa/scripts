@@ -57,7 +57,7 @@ PACKAGE="-p npu-test"
 PACKAGE="-p npu-integration-test"
 PROFILE=dev
 export NPU_GLOBAL_CONFIG_PATH=renegade
-# export RUST_LOG=debug
+export RUST_LOG=info #tactic_populator=trace,npu_compiler::compile=trace,npu_compiler_dma::dma_estimator=debug
 # export WRITE_C_CODE_PATH=code.c
 # export READ_C_CODE_PATH=code.c
 export RUST_BACKTRACE=1
@@ -65,7 +65,6 @@ export NO_PARALLEL_ESTIMATE=1
 # export FIR_TEST_BRIEF_DIFF=false
 export LOG_PATH=$PWD/crates/npu-integration-test/log/tactic_test_gather_0
 export TACTIC_ID=0
-export TESTVECTOR=$PWD/crates/npu-integration-test/generate_dma_command_testvector_from_llunlower.yaml
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
 test(test_bridge_selects_dram_tactic)|
 test(###end###)
