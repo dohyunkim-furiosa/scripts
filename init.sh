@@ -8,6 +8,7 @@ apt install -y git curl graphviz gh python3-pip unzip neovim
 git config --global merge.conflictstyle diff3
 git config --global user.name "Dohyun Kim"
 git config --global user.email dohyun.kim@furiosa.ai
+gh auth login
 
 if [ ! -d "$HOME/scripts" ]; then
     git clone https://github.com/dohyunkim-furiosa/scripts
@@ -24,8 +25,6 @@ ln -s /cache $HOME/.cache
 # install
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh #rust
 curl -sS https://starship.rs/install.sh | sh #starship
-
-gh auth login
 
 echo "
 #export CARGO_PROFILE_DEBUG_OPT_LEVEL=1
