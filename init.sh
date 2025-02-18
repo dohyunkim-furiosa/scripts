@@ -10,6 +10,7 @@ git config --global user.name "Dohyun Kim"
 git config --global user.email dohyun.kim@furiosa.ai
 gh auth login
 
+cd $HOME
 if [ ! -d "$HOME/scripts" ]; then
     git clone https://github.com/dohyunkim-furiosa/scripts
 else
