@@ -24,4 +24,15 @@ ln -s /cache $HOME/.cache
 # install
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh #rust
 curl -sS https://starship.rs/install.sh | sh #starship
-# echo 'eval "$(starship init bash)"' >> $HOME/.bashrc
+
+gh auth login
+
+echo "
+#export CARGO_PROFILE_DEBUG_OPT_LEVEL=1
+#export CARGO_PROFILE_TEST_OPT_LEVEL=1
+export PATH="$PATH:$HOME/.cargo/bin"
+eval "$(starship init bash)"
+
+. "$HOME/.cargo/env"
+" >> $HOME/.bashrc
+source $HOME/.bashrc
