@@ -18,6 +18,7 @@ export LD_LIBRARY_PATH=`pwd`/target/release/deps
 # export NVP_LOG_PATH=./nvp.log
 # export NVP_CHROME_TRACING=1
 export RUST_LOG=info #tactic_populator=trace,npu_compiler::compile=trace,npu_compiler_dma::dma_estimator=debug
+export TRACING_WITHOUT_TIME=1
 # export RUST_BACKTRACE=1
 ### E2E ###
 # export E2E_TEST_CACHE_STAGE=postlower #[strum(serialize_all = "lowercase")] pub enum FuriosaIrKind 이라서 prelower, postlower, ldfg 처럼 소문자를 써야함
@@ -47,16 +48,19 @@ export RUST_LOG=info #tactic_populator=trace,npu_compiler::compile=trace,npu_com
 ##### Debug Script #####
 PACKAGE="-p npu-ir-common"
 PACKAGE="-p command-gen"
-PACKAGE="-p npu-executor-common"
 PACKAGE=
-PACKAGE="-p tactic-populator"
 PACKAGE="-p npu-compiler-dma"
-PACKAGE="-p npu-compiler"
 PACKAGE="-p npu-test-ir"
 PACKAGE="-p npu-test"
 PACKAGE="-p npu-integration-test"
+PACKAGE="-p npu-executor-common"
+PACKAGE="-p npu-compiler"
+PACKAGE="-p tactic-populator"
+PROFILE=release
+PROFILE=fast-debug
+PROFILE=rel-with-deb-info
 PROFILE=dev
-export NPU_GLOBAL_CONFIG_PATH=renegade
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4npu-8pe.yml
 export RUST_LOG=info #tactic_populator=trace,npu_compiler::compile=trace,npu_compiler_dma::dma_estimator=debug
 # export WRITE_C_CODE_PATH=code.c
 # export READ_C_CODE_PATH=code.c
@@ -66,7 +70,7 @@ export NO_PARALLEL_ESTIMATE=1
 export LOG_PATH=$PWD/crates/npu-integration-test/log/tactic_test_gather_0
 export TACTIC_ID=0
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
-test(test_bridge_selects_dram_tactic)|
+test(unittest_lower_concat)|
 test(###end###)
 ' -- --include-ignored
 

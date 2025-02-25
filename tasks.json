@@ -8,11 +8,6 @@
 			"args": ["-c", "${input:scripts}"]
 		},
 		{
-			"label": "check",
-			"type": "shell",
-			"command": "${workspaceRoot}/.git/hooks/pre-push",
-		},
-		{
 			"label": "dependency update",
 			"type": "shell",
 			"command": "git submodule deinit --all -f && git submodule update --recursive --init --force && cargo use_renegade -r",
@@ -95,8 +90,9 @@
         {
             "id": "scripts",
             "type": "pickString",
-            "default": "test.sh",
+            "default": "`git rev-parse --path-format=absolute --git-common-dir`/hooks/pre-push &> test.log",
             "options": [
+				"`git rev-parse --path-format=absolute --git-common-dir`/hooks/pre-push &> test.log",
 				"z/test.sh &> test.log",
 				"z/test2.sh &> test.log",
 				"z/test.sh",
