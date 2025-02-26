@@ -1,5 +1,5 @@
 [merge]
-	conflictstyle = diff3
+	conflictstyle = zdiff3
 [user]
 	name = Dohyun Kim
 	email = dohyun.kim@furiosa.ai
@@ -7,4 +7,43 @@
 	helper = 
 	helper = !/usr/bin/gh auth git-credential
 [credential]
-	helper = "!f() { /root/.vscode-server/bin/cd4ee3b1c348a13bafd8f9ad8060705f6d4b9cba/node /tmp/vscode-remote-containers-3adb1ab4-793f-4186-a30a-e97a600d8a6b.js git-credential-helper $*; }; f"
+	helper = "!f() { /root/.vscode-server/bin/e54c774e0add60467559eb0d1e229c6452cf8447/node /tmp/vscode-remote-containers-3a0ad121-aa0e-4b8e-b314-01cc8f33d30e.js git-credential-helper $*; }; f"
+
+# see https://news.hada.io/topic?id=19441&utm_source=slack&utm_medium=bot&utm_campaign=T5P75SW80
+[column]  
+ui = auto  
+[branch]  
+sort = -committerdate  
+[tag]  
+sort = version:refname  
+[diff]  
+algorithm = histogram  
+colorMoved = plain  
+mnemonicPrefix = true  
+renames = true  
+[push]  
+default = simple  
+autoSetupRemote = true  
+followTags = true  
+[fetch]  
+prune = true  
+pruneTags = true  
+all = true  
+[help]  
+autocorrect = prompt  
+[commit]  
+verbose = true  
+[rerere]  
+enabled = true  
+autoupdate = true  
+[core]  
+excludesfile = ~/.gitignore  
+[rebase]  
+autoSquash = true  
+autoStash = true  
+updateRefs = true  
+
+# 파일 변경 감지 속도 향상 (optional)
+[core]  
+fsmonitor = true  
+untrackedCache = true  

@@ -3,11 +3,11 @@ set -e
 
 apt update
 apt upgrade -y
-apt install -y git curl graphviz gh python3-pip unzip neovim
+apt install -y git curl graphviz gh python3-pip unzip neovim software-properties-common
 
-git config --global merge.conflictstyle diff3
-git config --global user.name "Dohyun Kim"
-git config --global user.email dohyun.kim@furiosa.ai
+add-apt-repository ppa:git-core/ppa
+apt update
+apt install git
 gh auth login
 
 cd $HOME

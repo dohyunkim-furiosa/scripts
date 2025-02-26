@@ -19,8 +19,8 @@ git worktree add "../$NAME"
 mkdir -p /target/$NAME
 mkdir -p /cache/furiosa-libtorch
 mkdir -p /cache/llm_dfg_cache
-ln -s /target/$NAME $HOME/$NAME/target
-ln -s $HOME/scripts $HOME/$NAME/z
+ln -s /target/$NAME $HOME/$NAME/target # 이거 잘 안되고있는것 같다?
+ln -s $HOME/scripts $HOME/$NAME/wolfrevo
 ln -s /tmp $HOME/$NAME/tmp
 
 
@@ -31,6 +31,6 @@ echo "
 TODO:
   1. Follow the instructions in https://github.com/furiosa-ai/npu-tools/blob/master/README.md
     * update aws credential at https://aws-cli.furiosa.dev
-    * `dvc --cd artifacts/furiosa-libtorch/jammy pull -r origin -j 10`
+    * dvc --cd artifacts/furiosa-libtorch/jammy pull -r origin -j 10
   2. cargo use_renegade -r && cargo build
 "

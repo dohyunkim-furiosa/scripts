@@ -61,7 +61,11 @@ PROFILE=release
 PROFILE=fast-debug
 PROFILE=rel-with-deb-info
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
-export RUST_LOG=info #tactic_populator=trace,npu_compiler::compile=trace,npu_compiler_dma::dma_estimator=debug
+export RUST_LOG=info\
+,tactic_populator=trace\
+,npu_compiler::compile=trace\
+,npu_compiler_dma::dma_estimator=debug\
+,npu_compiler_base::cycle_estimator=debug
 export RUST_BACKTRACE=1
 export NO_PARALLEL_ESTIMATE=1
 # export FIR_TEST_BRIEF_DIFF=false
