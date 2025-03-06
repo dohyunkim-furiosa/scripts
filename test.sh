@@ -51,15 +51,15 @@ PACKAGE="-p command-gen"
 PACKAGE=
 PACKAGE="-p npu-test"
 PACKAGE="-p npu-compiler-dma"
-PACKAGE="-p tactic-populator"
 PACKAGE="-p npu-executor-common"
 PACKAGE="-p npu-compiler"
-PACKAGE="-p npu-integration-test"
 PACKAGE="-p npu-test-ir"
-PROFILE=dev
-PROFILE=release
+PACKAGE="-p npu-integration-test"
+PACKAGE="-p tactic-populator"
 PROFILE=fast-debug
+PROFILE=release
 PROFILE=rel-with-deb-info
+PROFILE=dev
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
 export RUST_LOG=info\
 ,tactic_populator=trace\
@@ -69,17 +69,13 @@ export RUST_LOG=info\
 export RUST_BACKTRACE=1
 export NO_PARALLEL_ESTIMATE=1
 # export FIR_TEST_BRIEF_DIFF=false
-export SKIP_FIR_TEST=true
+# export SKIP_FIR_TEST=true
 export LOG_PATH=$PWD/crates/npu-integration-test/log/tactic_test
 export TACTIC_ID=999
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
-test(test_gather_tactic_sparse#)|
-test(test_tactic_debug)|
+test(unittest_unlower_bridge_1)|
 test(###end###)
 ' -- --include-ignored
-	
-
-
 
 # #### Release Script #####
 # PACKAGE="-p npu-ir-common"
@@ -88,13 +84,11 @@ test(###end###)
 # PACKAGE="-p npu-compiler"
 # PACKAGE="-p npu-integration-test"
 # PROFILE=release
-# export NPU_GLOBAL_CONFIG_PATH=renegade-8pe
+# export NPU_GLOBAL_CONFIG_PATH=renegade
 # # export E2E_TEST_RUN_OPERATORWISE_TEST=1
 # # export SKIP_FIR_TEST=true
 # cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
-# test(tactic_test_gather_edge_cases_7)|
-# test(tactic_test_gather_edge_cases_8)|
-# test(tactic_test_gptj_kv_cache_generated_b64)|
+# test(tactic_test_gather_sparse_1)|
 # test(###end###)
 # ' -- --include-ignored --exact
 

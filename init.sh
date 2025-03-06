@@ -3,7 +3,7 @@ set -e
 
 apt update
 apt upgrade -y
-apt install -y git curl graphviz gh python3-pip unzip neovim software-properties-common
+apt install -y git curl graphviz gh python3-pip unzip neovim software-properties-common xdg-utils
 
 add-apt-repository ppa:git-core/ppa
 apt update
