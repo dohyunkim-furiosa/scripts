@@ -4,8 +4,8 @@ set -e
 ##### EnvVars #####
 ### Configs ###
 export LD_LIBRARY_PATH=`pwd`/target/release/deps
-# export NPU_GLOBAL_CONFIG_PATH=renegade-4pe
-# export NPU_DEVNAME=npu1pe4-7
+# export NPU_GLOBAL_CONFIG_PATH=renegade-8pe
+# export NPU_DEVNAME=npu0pe0-3,npu0pe4-7
 # export NPU_ARCH=renegade #nvp
 ### Logs and Profiles ###
 # export DISABLE_PROFILER=1
@@ -53,8 +53,8 @@ PACKAGE="-p npu-test"
 PACKAGE="-p npu-compiler-dma"
 PACKAGE="-p npu-executor-common"
 PACKAGE="-p npu-compiler"
-PACKAGE="-p npu-test-ir"
 PACKAGE="-p npu-integration-test"
+PACKAGE="-p npu-test-ir"
 PACKAGE="-p tactic-populator"
 PROFILE=fast-debug
 PROFILE=release
@@ -70,10 +70,10 @@ export RUST_BACKTRACE=1
 export NO_PARALLEL_ESTIMATE=1
 # export FIR_TEST_BRIEF_DIFF=false
 # export SKIP_FIR_TEST=true
-export LOG_PATH=$PWD/crates/npu-integration-test/log/tactic_test
-export TACTIC_ID=999
+export LOG_PATH=$PWD/crates/npu-integration-test/log/tactic_test_gather_sparse_1
+export TACTIC_ID=2
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
-test(unittest_unlower_bridge_1)|
+test(unittest_unlower_bridge_cluster_split_identical)|
 test(###end###)
 ' -- --include-ignored
 
