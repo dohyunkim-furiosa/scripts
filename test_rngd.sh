@@ -4,14 +4,14 @@ set -e
 ##### EnvVars #####
 ### Configs ###
 export LD_LIBRARY_PATH=`pwd`/target/release/deps
-# export NPU_GLOBAL_CONFIG_PATH=renegade-8pe
-# export NPU_DEVNAME=npu0pe0-3,npu0pe4-7
-# export NPU_ARCH=renegade #nvp
+export NPU_GLOBAL_CONFIG_PATH=renegade-8pe
+export NPU_DEVNAME=npu0pe0-3,npu0pe4-7
+export NPU_ARCH=renegade #nvp
 ### Logs and Profiles ###
 # export DISABLE_PROFILER=1
 # export NPU_PROFILER_PATH="profile.json"
-# export TUC_PROFILE_LEVEL="debug"
-# export ENABLE_PERT_PROFILE=1
+export TUC_PROFILE_LEVEL="debug"
+export ENABLE_PERT_PROFILE=1
 # export PERT_LOG=debug
 # export NVP_LOG=debug
 # export NVP_LOG_STDOUT=1
@@ -33,8 +33,8 @@ export TRACING_WITHOUT_TIME=1
 # export FIR_TEST_BRIEF_DIFF=false
 # export SKIP_FIR_TEST=true
 ### C code ###
-export DUMP_PE_PROGRAM=code.c
-# export LOAD_PE_PROGRAM=code.c
+# export WRITE_C_CODE_PATH=code.c
+# export READ_C_CODE_PATH=code.c
 ### Tactic Test ###
 # export LOG_PATH=$PWD/test_compile_llama3_1_mlperf_latest_w8fa8f_decode_mid_block_b32_s2048/O63
 # export TACTIC_ID=0
@@ -45,63 +45,69 @@ export DUMP_PE_PROGRAM=code.c
 # export PROPTEST_SEED=1234567890
 
 
-##### Debug Script #####
+#!/bin/bash
+
+# 실행할 명령어
+command_output=$(cat /sys/class/rngd_mgmt/rngd\!npu0mgmt/npu_governor)
+echo "$command_output" | grep -q "performance" || {
+    echo "Error: governance is not performance mode"
+    exit 1
+}
+
+# ##### Debug Script #####
+# PACKAGE="-p npu-ir-common"
+# PACKAGE="-p command-gen"
+# PACKAGE=
+# PACKAGE="-p npu-test"
+# PACKAGE="-p npu-compiler-dma"
+# PACKAGE="-p npu-executor-common"
+# PACKAGE="-p npu-compiler"
+# PACKAGE="-p npu-test-ir"
+# PACKAGE="-p tactic-populator"
+# PACKAGE="-p npu-integration-test"
+# PROFILE=fast-debug
+# PROFILE=release
+# PROFILE=rel-with-deb-info
+# PROFILE=dev
+# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
+# export RUST_LOG=info\
+# ,tactic_populator=trace\
+# ,npu_compiler::compile=trace\
+# ,npu_compiler_dma::dma_estimator=debug\
+# ,npu_compiler_base::cycle_estimator=debug
+# export RUST_BACKTRACE=1
+# export NO_PARALLEL_ESTIMATE=1
+# # export FIR_TEST_BRIEF_DIFF=false
+# # export SKIP_FIR_TEST=true
+
+# # e2e est rngd test
+# # TODO
+
+# export GENERATE_TEST_VECTORS=true
+# export NUM_SAMPLE=10
+# cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
+# test(test_dma_command_estimation_)|
+# test(###end###)
+# ' -- --include-ignored
+
+#### Release Script #####
 PACKAGE="-p npu-ir-common"
-PACKAGE="-p command-gen"
-PACKAGE=
-PACKAGE="-p npu-test"
-PACKAGE="-p npu-compiler-dma"
-PACKAGE="-p npu-executor-common"
-PACKAGE="-p npu-compiler"
-PACKAGE="-p npu-test-ir"
 PACKAGE="-p tactic-populator"
+PACKAGE="-p npu-compiler-kernelize"
+PACKAGE="-p npu-compiler"
 PACKAGE="-p npu-integration-test"
-PROFILE=fast-debug
 PROFILE=release
-PROFILE=rel-with-deb-info
-PROFILE=dev
-export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-4chip.yml
-# export NPU_DEVNAME=npu0pe0-3,npu0pe4-7
-export NPU_ARCH=nvp
-export RUST_LOG=info\
-,tactic_populator=trace\
-,npu_compiler::compile=trace\
-,npu_compiler_dma::dma_estimator=debug\
-,npu_compiler_base::cycle_estimator=debug
-export RUST_BACKTRACE=1
-export NO_PARALLEL_ESTIMATE=1
-# export FIR_TEST_BRIEF_DIFF=false
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
+# export E2E_TEST_RUN_OPERATORWISE_TEST=1
 # export SKIP_FIR_TEST=true
-# export LOG_PATH=$PWD/crates/npu-integration-test/log/tactic_test_gather_sparse_1
-# export TACTIC_ID=2
-# export TACTIC_PATH=`pwd`/PreLower_3219_cost_315910_hidable_false_rank_5.yaml
+export GENERATE_TEST_VECTORS=true
+# export MEASURE_TEST_VECTOR=true
+export NUM_SAMPLE=5
+# export RUST_BACKTRACE=1
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
-test(test_dma_command_stos_chip_shuffle_slice_)|
+test(test_dma_command_estimation_)|
 test(###end###)
 ' -- --include-ignored
-
-# #### Release Script #####
-# PACKAGE="-p npu-ir-common"
-# PACKAGE="-p tactic-populator"
-# PACKAGE="-p npu-compiler-kernelize"
-# PACKAGE="-p npu-integration-test"
-# PACKAGE="-p npu-compiler"
-# PROFILE=release
-# export NPU_GLOBAL_CONFIG_PATH=renegade-8pe-4chip
-# # export E2E_TEST_RUN_OPERATORWISE_TEST=1
-# export SKIP_FIR_TEST=true
-# # export RUST_LOG=info\
-# # ,tactic_populator=trace\
-# # ,npu_compiler::compile=trace\
-# # ,npu_compiler_dma::dma_estimator=debug\
-# # ,npu_compiler_base::cycle_estimator=debug
-# # export NO_PARALLEL_ESTIMATE=1
-# cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
-# test(test_compile_llama3_1_mlperf_latest_8pe_4chip_w16a16_decode_mid_block_b16_s2048)|
-# test(###end###)
-# ' -- --include-ignored --exact
-
-
 
 
 

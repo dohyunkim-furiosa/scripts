@@ -26,25 +26,6 @@ ruff format --check --diff scripts
 " > .git/hooks/pre-push
 chmod u+x .git/hooks/pre-push
 
-rustup default nightly
-##### furiosa/npu-tools README.md #####
-rustup target add aarch64-unknown-none-softfloat
-
-apt install -y build-essential clang libncurses-dev libssl-dev pkg-config python3-dev gcc-aarch64-linux-gnu libboost-dev libboost-regex-dev libelf-dev cmake libtbb-dev clang-format-11 clang-tidy libc6-dev-arm64-cross libyaml-cpp-dev libgl1-mesa-glx libcapstone-dev ninja-build python-is-python3
-pip3 install -U pip wheel
-pip3 install -r tekton/build/requirements.txt
-pip3 install fbgemm-gpu-cpu
-
-PROTOC_VERSION=22.0
-curl -Lo protoc.zip "https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip"  \
-&& unzip -q protoc.zip bin/protoc -d /usr/local \
-&& chmod a+x /usr/local/bin/protoc
-PATH="/usr/local/bin:$PATH"
-rm protoc.zip
-############################################
-pip3 install dvc[s3]
-
-
 mkdir -p /target/$NAME
 mkdir -p /cache/furiosa-libtorch
 mkdir -p /cache/llm_dfg_cache

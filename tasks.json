@@ -73,6 +73,7 @@
                 "build",
                 "cancel-pipelines",
                 "run",
+                "post-rngd-ci slack_ts.txt",
                 "manual-daily-test(todo)",
             ],
             "description": "",
