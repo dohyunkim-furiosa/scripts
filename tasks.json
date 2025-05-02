@@ -20,7 +20,7 @@
 		{
 			"label": "ci trigger",
 			"type": "shell",
-			"command": "python3 tekton/run_pipeline.py ${input:commit-hash} ${input:ci-action}",
+			"command": "python3 tekton/run_pipeline.py --context aks ${input:commit-hash} ${input:ci-action}",
 		},
 		// origin이랑 furiosa 결정하는 옵션 추가하던지 해야해서 일단 주석처리함.
 		// {
@@ -73,6 +73,7 @@
                 "build",
                 "cancel-pipelines",
                 "run",
+                "rngd-ci",
                 "post-rngd-ci slack_ts.txt",
                 "manual-daily-test(todo)",
             ],
@@ -83,8 +84,12 @@
             "type": "pickString",
             "default": "run",
             "options": [
-                "https://aws-cli.furiosa.dev", // dvc
-                "https://k8s-all-login.furiosa.in", // AWS K8S: CI의 aws접근 권한, Dosan SW Team: pod 생성 권한
+				// dvc (+aws ci?)
+                "https://aws-cli.furiosa.dev",
+				// AWS k8s: aws ci 접근 권한
+				// Azure CI JP k8s: aks ci 접근 권한
+				// Dosan SW Team: pod 생성 권한
+                "https://k8s-all-login.furiosa.in",
             ],
             "description": "",
         },

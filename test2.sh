@@ -33,8 +33,8 @@ export TRACING_WITHOUT_TIME=1
 # export FIR_TEST_BRIEF_DIFF=false
 # export SKIP_FIR_TEST=true
 ### C code ###
-export DUMP_PE_PROGRAM=code.c
-# export LOAD_PE_PROGRAM=code.c
+# export DUMP_PE_PROGRAM=code
+# export LOAD_PE_PROGRAM=code
 ### Tactic Test ###
 # export LOG_PATH=$PWD/test_compile_llama3_1_mlperf_latest_w8fa8f_decode_mid_block_b32_s2048/O63
 # export TACTIC_ID=0
@@ -60,7 +60,7 @@ PROFILE=fast-debug
 PROFILE=release
 PROFILE=rel-with-deb-info
 PROFILE=dev
-export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-4chip.yml
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
 # export NPU_DEVNAME=npu0pe0-3,npu0pe4-7
 export NPU_ARCH=nvp
 export RUST_LOG=info\
@@ -76,7 +76,7 @@ export NO_PARALLEL_ESTIMATE=1
 # export TACTIC_ID=2
 # export TACTIC_PATH=`pwd`/PreLower_3219_cost_315910_hidable_false_rank_5.yaml
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
-test(test_dma_command_stos_chip_shuffle_slice_)|
+test(test_dma_command_stos_chip_shuffle_)|
 test(###end###)
 ' -- --include-ignored
 
