@@ -31,7 +31,8 @@
 		{
 			"label": "RNGD setting",
 			"type": "shell",
-			"command": "cd crates/device-runtime/pert && cargo build --bin pert --target aarch64-unknown-none-softfloat -r && aarch64-none-elf-objcopy -O binary ../target/aarch64-unknown-none-softfloat/release/pert pe_boot.bin && sudo -S furiosa_pert_deploy -d ${input:npu-id} -f pe_boot.bin && sudo sh -c 'echo performance > /sys/class/rngd_mgmt/rngd\\!${input:npu-id}mgmt/npu_governor'",
+			"dependsOn": "dependency update",
+			"command": "cargo run --release --bin libnpu-builder --no-default-features --features pert && aarch64-none-elf-objcopy -O binary target/pert pe_boot.bin && sudo furiosa_pert_deploy -d ${input:npu-id} -f pe_boot.bin && sudo sh -c 'echo performance > /sys/class/rngd_mgmt/rngd\\!${input:npu-id}mgmt/npu_governor'",
 		},
 	],
 
