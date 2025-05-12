@@ -102,12 +102,35 @@
             "type": "pickString",
             "default": "`git rev-parse --path-format=absolute --git-common-dir`/hooks/pre-push &> check.log",
             "options": [
-				"`git rev-parse --path-format=absolute --git-common-dir`/hooks/pre-push &> check.log",
-				"wolfrevo/test.sh &> test.log",
-				"wolfrevo/test2.sh &> test2.log",
-				"wolfrevo/test.sh",
-				"wolfrevo/test2.sh",
-				"wolfrevo/reuse-edf.sh",
+				{
+					"label": "check",
+					"value": "`git rev-parse --path-format=absolute --git-common-dir`/hooks/pre-push &> check.log"
+				},
+				{
+					"label": "test&>",
+					"value": "wolfrevo/test.sh &> test.log"
+				},
+				{
+					"label": "test2&>",
+					"value": "wolfrevo/test2.sh &> test2.log"
+				},
+				{
+					"label": "test_rngd&>",
+					"value": "wolfrevo/test_rngd.sh &> test_rngd.log"
+				},
+				{
+					"label": "test",
+					"value": "wolfrevo/test.sh"
+				},
+				{
+					"label": "test2",
+					"value": "wolfrevo/test2.sh"
+				},
+				{
+					"label": "test_rngd",
+					"value": "wolfrevo/test_rngd.sh"
+				},
+				"wolfrevo/reuse-edf.sh"
             ],
             "description": "",
         },
