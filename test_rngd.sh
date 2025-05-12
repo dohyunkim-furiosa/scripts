@@ -12,7 +12,7 @@ export NPU_ARCH=renegade #nvp
 # export NPU_PROFILER_PATH="profile.json"
 export TUC_PROFILE_LEVEL="debug"
 export ENABLE_PERT_PROFILE=1
-# export PERT_LOG=debug
+export PERT_LOG=debug
 # export NVP_LOG=debug
 # export NVP_LOG_STDOUT=1
 # export NVP_LOG_PATH=./nvp.log
@@ -33,8 +33,8 @@ export TRACING_WITHOUT_TIME=1
 # export FIR_TEST_BRIEF_DIFF=false
 # export SKIP_FIR_TEST=true
 ### C code ###
-# export WRITE_C_CODE_PATH=code.c
-# export READ_C_CODE_PATH=code.c
+# export DUMP_PE_PROGRAM=code
+# export LOAD_PE_PROGRAM=code
 ### Tactic Test ###
 # export LOG_PATH=$PWD/test_compile_llama3_1_mlperf_latest_w8fa8f_decode_mid_block_b32_s2048/O63
 # export TACTIC_ID=0
@@ -44,13 +44,10 @@ export TRACING_WITHOUT_TIME=1
 # export RAYON_NUM_THREADS=32
 # export PROPTEST_SEED=1234567890
 
-
-#!/bin/bash
-
-# 실행할 명령어
+# Check RNGD governor
 command_output=$(cat /sys/class/rngd_mgmt/rngd\!npu0mgmt/npu_governor)
 echo "$command_output" | grep -q "performance" || {
-    echo "Error: governance is not performance mode"
+    echo "Error: governor is not performance mode"
     exit 1
 }
 
@@ -78,15 +75,16 @@ echo "$command_output" | grep -q "performance" || {
 # export RUST_BACKTRACE=1
 # export NO_PARALLEL_ESTIMATE=1
 # # export FIR_TEST_BRIEF_DIFF=false
-# # export SKIP_FIR_TEST=true
+# export SKIP_FIR_TEST=true
 
 # # e2e est rngd test
 # # TODO
 
 # export GENERATE_TEST_VECTORS=true
 # export NUM_SAMPLE=10
+
 # cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
-# test(test_dma_command_estimation_)|
+# test(test_compile_low_level_lower_3)|
 # test(###end###)
 # ' -- --include-ignored
 
@@ -98,16 +96,24 @@ PACKAGE="-p npu-compiler"
 PACKAGE="-p npu-integration-test"
 PROFILE=release
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
+export RUST_LOG=info\
+,npu_compiler_dma::dma_estimator=debug
+
 # export E2E_TEST_RUN_OPERATORWISE_TEST=1
 # export SKIP_FIR_TEST=true
-export GENERATE_TEST_VECTORS=true
+# export GENERATE_TEST_VECTORS=true
 # export MEASURE_TEST_VECTOR=true
-export NUM_SAMPLE=5
+# export NUM_SAMPLE=48
 # export RUST_BACKTRACE=1
-cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
-test(test_dma_command_estimation_)|
-test(###end###)
-' -- --include-ignored
+# export NPU_PROFILER_PATH="profile.json"
+# export SKIP_SYNC_CHECK=1
+
+# for i in $(seq 1 50); do
+    cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
+    test(test_rlir_sync_1)|
+    test(###end###)
+    ' -- --include-ignored
+# done
 
 
 

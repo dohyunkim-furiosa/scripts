@@ -73,9 +73,8 @@
                 "build",
                 "cancel-pipelines",
                 "run",
-                "rngd-ci",
-                "post-rngd-ci slack_ts.txt",
-                "manual-daily-test(todo)",
+                // "rngd-ci", 이거는 /ci-bot run_rngd_ci 를 써야함. 이거로 실행하면 context가 달라서 할당을 못받는듯.
+                "post-rngd-ci &> slack_ts.txt",
             ],
             "description": "",
         },
@@ -84,12 +83,16 @@
             "type": "pickString",
             "default": "run",
             "options": [
-				// dvc (+aws ci?)
+				// (deprecated) dvc[s3](+aws ci?)
                 "https://aws-cli.furiosa.dev",
+
 				// AWS k8s: aws ci 접근 권한
 				// Azure CI JP k8s: aks ci 접근 권한
 				// Dosan SW Team: pod 생성 권한
                 "https://k8s-all-login.furiosa.in",
+
+				// azure cli
+				// https://furiosa-ai.slack.com/archives/C7F3LNU2Y/p1746767578968189?thread_ts=1746748342.864029&cid=C7F3LNU2Y
             ],
             "description": "",
         },

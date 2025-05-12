@@ -13,7 +13,7 @@ export LD_LIBRARY_PATH=`pwd`/target/release/deps
 # export TUC_PROFILE_LEVEL="debug"
 # export ENABLE_PERT_PROFILE=1
 # export PERT_LOG=debug
-# export NVP_LOG=debug
+# export NVP_LOG=info #debug
 # export NVP_LOG_STDOUT=1
 # export NVP_LOG_PATH=./nvp.log
 # export NVP_CHROME_TRACING=1
@@ -24,7 +24,7 @@ export TRACING_WITHOUT_TIME=1
 # export E2E_TEST_CACHE_STAGE=postlower #[strum(serialize_all = "lowercase")] pub enum FuriosaIrKind 이라서 prelower, postlower, ldfg 처럼 소문자를 써야함
 # export DUMP_GRAPHS=true
 # export FIR_TEST_DUMP_DFG_SPEC=1
-# export E2E_TEST_RUN_OPERATORWISE_TEST=1 
+# export E2E_TEST_RUN_OPERATORWISE_TEST=1
 # export NO_PARALLEL_ESTIMATE=1
 # export DIFF_DEBUGGER="1"
 # export DUMP_TENSOR=1 #TensorIndex
@@ -32,6 +32,8 @@ export TRACING_WITHOUT_TIME=1
 # export GENERATE_TEST_VECTORS=1
 # export FIR_TEST_BRIEF_DIFF=false
 # export SKIP_FIR_TEST=true
+# export SKIP_LIR_VERIFIER=1
+# export SKIP_SYNC_CHECK=1
 ### C code ###
 # export DUMP_PE_PROGRAM=code
 # export LOAD_PE_PROGRAM=code
@@ -52,44 +54,59 @@ PACKAGE=
 PACKAGE="-p npu-test"
 PACKAGE="-p npu-compiler-dma"
 PACKAGE="-p npu-executor-common"
-PACKAGE="-p npu-compiler"
 PACKAGE="-p npu-test-ir"
 PACKAGE="-p tactic-populator"
+PACKAGE="-p npu-compiler"
 PACKAGE="-p npu-integration-test"
 PROFILE=fast-debug
 PROFILE=release
 PROFILE=rel-with-deb-info
 PROFILE=dev
-export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-4chip.yml
 # export NPU_DEVNAME=npu0pe0-3,npu0pe4-7
 export NPU_ARCH=nvp
 export RUST_LOG=info\
 ,tactic_populator=trace\
 ,npu_compiler::compile=trace\
+,npu_compiler_dma=debug\
 ,npu_compiler_dma::dma_estimator=debug\
 ,npu_compiler_base::cycle_estimator=debug
+export NVP_LOG=info #debug
+export NVP_LOG_STDOUT=1
 export RUST_BACKTRACE=1
 export NO_PARALLEL_ESTIMATE=1
 # export FIR_TEST_BRIEF_DIFF=false
-# export SKIP_FIR_TEST=true
-# export LOG_PATH=$PWD/crates/npu-integration-test/log/tactic_test_gather_sparse_1
-# export TACTIC_ID=2
+export SKIP_FIR_TEST=true
+# export SKIP_LIR_VERIFIER=1
+# export SKIP_SYNC_CHECK=1
+# export LOG_PATH=$PWD/crates/npu-integration-test/log/tactic_test_gptj_kv_cache_prompt_b1
+# export TACTIC_ID=0
 # export TACTIC_PATH=`pwd`/PreLower_3219_cost_315910_hidable_false_rank_5.yaml
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
+# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
+# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
+# export DUMP_PE_PROGRAM=code
+# export LOAD_PE_PROGRAM=code
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
-test(test_dma_command_stos_chip_shuffle_)|
+test(test_tactic_debug#)|
+test(codegen_test_tensor_dma_gather_1#)|
+test(test_dma_command_stos_identity_1#)|
+test(test_rlir_sync_1#)|
+test(test_rlir_chip_sync#)|
+test(test_dma_command_spm_iden)|
 test(###end###)
-' -- --include-ignored
+' -- --include-ignored --exact
 
 # #### Release Script #####
 # PACKAGE="-p npu-ir-common"
-# PACKAGE="-p tactic-populator"
 # PACKAGE="-p npu-compiler-kernelize"
 # PACKAGE="-p npu-integration-test"
 # PACKAGE="-p npu-compiler"
+# PACKAGE="-p tactic-populator"
 # PROFILE=release
-# export NPU_GLOBAL_CONFIG_PATH=renegade-8pe-4chip
+# export NPU_GLOBAL_CONFIG_PATH=renegade-8pe
 # # export E2E_TEST_RUN_OPERATORWISE_TEST=1
-# export SKIP_FIR_TEST=true
+# # export SKIP_FIR_TEST=true
 # # export RUST_LOG=info\
 # # ,tactic_populator=trace\
 # # ,npu_compiler::compile=trace\
@@ -97,7 +114,7 @@ test(###end###)
 # # ,npu_compiler_base::cycle_estimator=debug
 # # export NO_PARALLEL_ESTIMATE=1
 # cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
-# test(test_compile_llama3_1_mlperf_latest_8pe_4chip_w16a16_decode_mid_block_b16_s2048)|
+# test(unittest_tensor_unit_bridge_7)|
 # test(###end###)
 # ' -- --include-ignored --exact
 
@@ -107,10 +124,11 @@ test(###end###)
 
 
 
-
+# ##### npu-runtime-test #####
+# cargo run -r --bin npu_runtime_test x.edf -a x.test_vector
 
 # ##### RNGD plot #####
-# cargo run --bin dump_lir_plot lir.json --output rngd_plot --type profile --profile profile.json
+# cargo run --bin dump_lir_plot lir3.json --output rngd_plot3 --profile profile3.json --type profile
 
 ##### Operatorwise log 검사 템플릿 #####
 # git checkout debug
