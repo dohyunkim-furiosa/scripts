@@ -12,10 +12,14 @@ else
     echo "$HOME/$NAME already exists. Skipping cloning."
 fi
 cd $HOME/$NAME
-git remote add furiosa https://github.com/furiosa-ai/npu-tools
-git fetch furiosa
-git checkout furiosa/master
-git submodule update --init --recursive --force
+
+# git settings
+if ! git remote | grep -q '^furiosa$'; then
+    git remote add furiosa https://github.com/furiosa-ai/npu-tools
+    git fetch furiosa
+    git checkout furiosa/master
+    git submodule update --init --recursive --force
+fi
 echo "#!/bin/sh
 set -e
 cargo fmt --all -- --check
@@ -26,6 +30,10 @@ ruff format --check --diff scripts
 " > .git/hooks/pre-push
 chmod u+x .git/hooks/pre-push
 
+# softlink settings
+rm -rf target wolfrevo tmp
+rm -rf artifacts/furiosa-libtorch/.dvc/cache crates/npu-torch-models/llm_dfg_cache/.dvc/cache
+rm -rf crates/npu-torch-models/llm_dfg_cache/.dvc/cache
 mkdir -p /target/$NAME
 mkdir -p /cache/furiosa-libtorch
 mkdir -p /cache/llm_dfg_cache
@@ -35,16 +43,12 @@ ln -s /tmp tmp
 ln -s /cache/furiosa-libtorch/ artifacts/furiosa-libtorch/.dvc/cache
 ln -s /cache/llm_dfg_cache/ crates/npu-torch-models/llm_dfg_cache/.dvc/cache
 
-
+# install dependencies
+pip3 install -r $HOME/npu-tools/tekton/build/requirements.txt
+dvc --cd artifacts/furiosa-libtorch/jammy pull -r origin -j 10
 cargo install cargo-sort --locked
 cargo install cargo-nextest --locked
 
-mkdir -p $HOME/.aws
-
 echo "
-TODO:
-  1. Follow the instructions in https://github.com/furiosa-ai/npu-tools/blob/master/README.md
-    * update aws credential at https://aws-cli.furiosa.dev
-    * dvc --cd artifacts/furiosa-libtorch/jammy pull -r origin -j 10
-  2. cargo use_renegade -r && cargo build
+TODO: Follow the instructions in https://github.com/furiosa-ai/npu-tools/blob/master/README.md
 "
