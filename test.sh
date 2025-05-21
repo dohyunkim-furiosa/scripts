@@ -84,7 +84,7 @@ export NO_PARALLEL_ESTIMATE=1
 # export TACTIC_PATH=`pwd`/PreLower_3219_cost_315910_hidable_false_rank_5.yaml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
-# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
 # export DUMP_PE_PROGRAM=code
 # export LOAD_PE_PROGRAM=code
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
@@ -93,7 +93,8 @@ test(codegen_test_tensor_dma_gather_1#)|
 test(test_dma_command_stos_identity_1#)|
 test(test_rlir_sync_1#)|
 test(test_rlir_chip_sync#)|
-test(test_dma_command_spm)|
+test(uniitest_dedup_sync_instructions#)|
+test(test_profile_tensor_dma_2)|
 test(###end###)
 ' -- --include-ignored --exact
 

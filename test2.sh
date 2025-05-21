@@ -85,15 +85,15 @@ export SKIP_FIR_TEST=true
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
-# export DUMP_PE_PROGRAM=code
+export DUMP_PE_PROGRAM=code
 # export LOAD_PE_PROGRAM=code
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
 test(test_tactic_debug#)|
 test(codegen_test_tensor_dma_gather_1#)|
 test(test_dma_command_stos_identity_1#)|
-test(test_rlir_sync_1#)|
+test(test_dma_command_spm#)|
 test(test_rlir_chip_sync#)|
-test(test_dma_command_spm_iden)|
+test(test_rlir_sync_1)|
 test(###end###)
 ' -- --include-ignored --exact
 
