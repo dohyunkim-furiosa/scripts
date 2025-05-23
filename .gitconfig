@@ -1,15 +1,15 @@
-[merge]
-	conflictstyle = zdiff3
-[user]
-	name = Dohyun Kim
-	email = dohyun.kim@furiosa.ai
+
 [credential "https://github.com"]
 	helper = 
 	helper = !/usr/bin/gh auth git-credential
 [credential]
 	helper = "!f() { /root/.vscode-server/bin/e54c774e0add60467559eb0d1e229c6452cf8447/node /tmp/vscode-remote-containers-3a0ad121-aa0e-4b8e-b314-01cc8f33d30e.js git-credential-helper $*; }; f"
-
+[user]
+	name = Dohyun Kim
+	email = dohyun.kim@furiosa.ai
 # see https://news.hada.io/topic?id=19441&utm_source=slack&utm_medium=bot&utm_campaign=T5P75SW80
+[merge]
+conflictstyle = zdiff3
 [column]  
 ui = auto  
 [branch]  

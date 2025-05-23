@@ -23,6 +23,6 @@ EDF=temp_test/$TESTNAME.edf #use downloaded edf
 NUM_REPEAT=20
 
 # wolfrevo/run_rngd_ci.sh $SHA
-# wolfrevo/download_test_vec.sh $SHA $TESTNAME $TARGET
+wolfrevo/download_test_vec.sh $SHA $TESTNAME $TARGET
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E "test($TESTNAME)" -- --exact
 NPU_PROFILER_PATH="profile.json" NPU_ARCH="renegade" NPU_DEVNAME="$DEVNAME" DIFF_DEBUGGER="1" TUC_PROFILE_LEVEL="debug" ENABLE_PERT_PROFILE="1" temp_test/npu_runtime_test $EDF -m temp_test/$TESTNAME.yaml -v temp_test -n $NUM_REPEAT -r 1 --concurrency 1

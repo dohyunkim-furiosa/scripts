@@ -30,6 +30,7 @@ mkdir -p /cache
 ln -s /cache $HOME/.cache
 
 # install
+curl -LsSf https://github.com/rui314/mold/releases/download/v2.39.1/mold-2.39.1-x86_64-linux.tar.gz | tar -C /usr/local -xzf - --strip-components=1 #mold
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y #rust
 curl -sS https://starship.rs/install.sh | sh -s -- -y #starship
 
