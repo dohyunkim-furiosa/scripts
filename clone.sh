@@ -44,10 +44,11 @@ ln -s /cache/furiosa-libtorch/ artifacts/furiosa-libtorch/.dvc/cache
 ln -s /cache/llm_dfg_cache/ crates/npu-torch-models/llm_dfg_cache/.dvc/cache
 
 # install dependencies
+source $HOME/venv/bin/activate
 pip3 install -r $HOME/npu-tools/tekton/build/requirements.txt
 dvc --cd artifacts/furiosa-libtorch/jammy pull -r origin -j 10
-cargo install cargo-sort --locked
-cargo install cargo-nextest --locked
+cargo install cargo-sort --locked --force
+cargo install cargo-nextest --locked --force
 
 echo "
 TODO: Follow the instructions in https://github.com/furiosa-ai/npu-tools/blob/master/README.md
