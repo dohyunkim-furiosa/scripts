@@ -25,7 +25,7 @@ fi
 chmod +x $HOME/scripts/*
 
 # create softlinks
-rm -rf $HOME/.cache
+# rm -rf $HOME/.cache
 mkdir -p /cache
 ln -s /cache $HOME/.cache
 
@@ -48,7 +48,7 @@ apt install -y build-essential clang libncurses-dev libssl-dev pkg-config python
 python3 -m venv venv
 source venv/bin/activate
 pip3 install -U pip wheel setuptools
-pip3 install fbgemm-gpu-cpu dvc[azure]
+pip3 install fbgemm-gpu-cpu 'dvc[azure]'
 
 PROTOC_VERSION=22.0
 curl -Lo protoc.zip "https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip" \

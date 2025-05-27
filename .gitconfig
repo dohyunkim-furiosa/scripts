@@ -9,7 +9,8 @@
 	email = dohyun.kim@furiosa.ai
 # see https://news.hada.io/topic?id=19441&utm_source=slack&utm_medium=bot&utm_campaign=T5P75SW80
 [merge]
-conflictstyle = zdiff3
+# conflictstyle = zdiff3 # 버전마다 안되는경우가 있음
+conflictstyle = diff3
 [column]  
 ui = auto  
 [branch]  
