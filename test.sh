@@ -21,7 +21,7 @@ export RUST_LOG=info #tactic_populator=trace,npu_compiler::compile=trace,npu_com
 export TRACING_WITHOUT_TIME=1
 # export RUST_BACKTRACE=1
 ### E2E ###
-# export E2E_TEST_CACHE_STAGE=postlower #[strum(serialize_all = "lowercase")] pub enum FuriosaIrKind 이라서 prelower, postlower, ldfg 처럼 소문자를 써야함
+# export E2E_TEST_CACHE_STAGE=lir
 # export DUMP_GRAPHS=true
 # export FIR_TEST_DUMP_DFG_SPEC=1
 # export E2E_TEST_RUN_OPERATORWISE_TEST=1
@@ -29,11 +29,12 @@ export TRACING_WITHOUT_TIME=1
 # export DIFF_DEBUGGER="1"
 # export DUMP_TENSOR=1 #TensorIndex
 # export DUMP_DIFF=1
-# export GENERATE_TEST_VECTORS=1
+# export GENERATE_TEST_VECTORS=true
+# export NUM_SAMPLE=20
 # export FIR_TEST_BRIEF_DIFF=false
 # export SKIP_FIR_TEST=true
-# export SKIP_LIR_VERIFIER=1
-# export SKIP_SYNC_CHECK=1
+# export SKIP_LIR_VERIFIER=true
+# export SKIP_SYNC_CHECK=true
 ### C code ###
 # export DUMP_PE_PROGRAM=code
 # export LOAD_PE_PROGRAM=code
@@ -62,29 +63,28 @@ PROFILE=fast-debug
 PROFILE=release
 PROFILE=rel-with-deb-info
 PROFILE=dev
-export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-4chip.yml
 # export NPU_DEVNAME=npu0pe0-3,npu0pe4-7
 export NPU_ARCH=nvp
 export RUST_LOG=info\
 ,tactic_populator=trace\
 ,npu_compiler::compile=trace\
-,npu_compiler_dma=debug\
-,npu_compiler_dma::dma_estimator=debug\
+,npu_compiler_dma=trace\
+,npu_compiler_dma::dma_estimator=trace\
 ,npu_compiler_base::cycle_estimator=debug
-export NVP_LOG=info #debug
-export NVP_LOG_STDOUT=1
+# export NVP_LOG=info #debug
+# export NVP_LOG_STDOUT=1
 export RUST_BACKTRACE=1
 export NO_PARALLEL_ESTIMATE=1
 # export FIR_TEST_BRIEF_DIFF=false
-# export SKIP_FIR_TEST=true
-# export SKIP_LIR_VERIFIER=1
-# export SKIP_SYNC_CHECK=1
+export SKIP_FIR_TEST=true
+export SKIP_LIR_VERIFIER=true
+export SKIP_SYNC_CHECK=true
 # export LOG_PATH=$PWD/crates/npu-integration-test/log/tactic_test_gptj_kv_cache_prompt_b1
 # export TACTIC_ID=0
 # export TACTIC_PATH=`pwd`/PreLower_3219_cost_315910_hidable_false_rank_5.yaml
-# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
-export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
+# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
 # export DUMP_PE_PROGRAM=code
 # export LOAD_PE_PROGRAM=code
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
@@ -93,10 +93,9 @@ test(codegen_test_tensor_dma_gather_1#)|
 test(test_dma_command_stos_identity_1#)|
 test(test_rlir_sync_1#)|
 test(test_rlir_chip_sync#)|
-test(uniitest_dedup_sync_instructions#)|
-test(test_profile_tensor_dma_2)|
+test(test_dma_command_estimation)|
 test(###end###)
-' -- --include-ignored --exact
+' #-- --include-ignored --exact
 
 # #### Release Script #####
 # PACKAGE="-p npu-ir-common"
@@ -107,7 +106,10 @@ test(###end###)
 # PROFILE=release
 # export NPU_GLOBAL_CONFIG_PATH=renegade-8pe
 # # export E2E_TEST_RUN_OPERATORWISE_TEST=1
+# export E2E_TEST_CACHE_STAGE=lir
 # export SKIP_FIR_TEST=true
+# export SKIP_LIR_VERIFIER=true
+# export SKIP_SYNC_CHECK=true
 # # export RUST_LOG=info\
 # # ,tactic_populator=trace\
 # # ,npu_compiler::compile=trace\
@@ -115,7 +117,7 @@ test(###end###)
 # # ,npu_compiler_base::cycle_estimator=debug
 # # export NO_PARALLEL_ESTIMATE=1
 # cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
-# test(test_compile_exaone3_5_32b_8pe_w16a16_decode_first_block_b1_s4096)|
+# test(test_compile_llama3_1_8b_mlperf_8pe_w16a16_chunked_prefill_first_block_b1_s8192x4_8192)|
 # test(###end###)
 # ' -- --include-ignored --exact
 

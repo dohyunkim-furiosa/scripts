@@ -19,16 +19,8 @@ if ! git remote | grep -q '^furiosa$'; then
     git fetch furiosa
     git checkout furiosa/master
     git submodule update --init --recursive --force
+    git config core.hooksPath wolfrevo
 fi
-echo "#!/bin/sh
-set -e
-cargo fmt --all -- --check
-cargo clippy --all-targets -- -D warnings
-cargo sort --grouped --check --workspace
-ruff check scripts
-ruff format --check --diff scripts
-" > .git/hooks/pre-push
-chmod u+x .git/hooks/pre-push
 
 # softlink settings
 rm -rf target wolfrevo tmp
@@ -49,6 +41,7 @@ dvc --cd artifacts/furiosa-libtorch/jammy pull -r origin -j 10
 cargo install cargo-sort --locked
 cargo install cargo-nextest --locked
 
-echo "
-TODO: Follow the instructions in https://github.com/furiosa-ai/npu-tools/blob/master/README.md
+echo "TODO:
+* Follow the instructions in https://github.com/furiosa-ai/npu-tools/blob/master/README.md
+* Login VSCode
 "
