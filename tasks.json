@@ -32,7 +32,7 @@
 			"label": "RNGD setting",
 			"type": "shell",
 			"dependsOn": "dependency update",
-			"command": "cargo run --release --bin libnpu-builder --no-default-features --features pert && aarch64-none-elf-objcopy -O binary target/pert pe_boot.bin && sudo furiosa_pert_deploy -d ${input:npu-id} -f pe_boot.bin && sudo sh -c 'echo performance > /sys/class/rngd_mgmt/rngd\\!${input:npu-id}mgmt/npu_governor'",
+			"command": "cargo run --release --bin libnpu-builder --no-default-features --features pert && aarch64-linux-gnu-objcopy -O binary target/pert pe_boot.bin && sudo furiosa_pert_deploy -d ${input:npu-id} -f pe_boot.bin && sudo sh -c 'echo performance > /sys/class/rngd_mgmt/rngd\\!${input:npu-id}mgmt/npu_governor'",
 		},
 	],
 
@@ -100,11 +100,11 @@
         {
             "id": "scripts",
             "type": "pickString",
-            "default": "`git rev-parse --path-format=absolute --git-common-dir`/hooks/pre-push &> check.log",
+            "default": "$HOME/scripts/pre-push &> check.log",
             "options": [
 				{
 					"label": "check",
-					"value": "`git rev-parse --path-format=absolute --git-common-dir`/hooks/pre-push &> check.log"
+					"value": "$HOME/scripts/pre-push &> check.log"
 				},
 				{
 					"label": "test&>",

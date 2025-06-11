@@ -95,7 +95,7 @@ PACKAGE="-p npu-compiler-kernelize"
 PACKAGE="-p npu-compiler"
 PACKAGE="-p npu-integration-test"
 PROFILE=release
-export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-4chip.yml
 export RUST_LOG=info\
 ,npu_compiler_dma::dma_estimator=debug
 
@@ -110,7 +110,7 @@ export RUST_LOG=info\
 
 # for i in $(seq 1 50); do
     cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
-    test(test_rlir_sync_1)|
+    test(test_rlir_sync_0)|
     test(###end###)
     ' -- --include-ignored
 # done
