@@ -29,10 +29,11 @@
 		// 	"command": "BRANCH=${input:temp-branches} && git branch -f $BRANCH HEAD && git push -f origin $BRANCH"
 		// },
 		{
-			"label": "RNGD setting",
+			"label": "pert deploy",
 			"type": "shell",
 			"dependsOn": "dependency update",
 			"command": "cargo run --release --bin libnpu-builder --no-default-features --features pert && aarch64-linux-gnu-objcopy -O binary target/pert pe_boot.bin && sudo furiosa_pert_deploy -d ${input:npu-id} -f pe_boot.bin && sudo sh -c 'echo performance > /sys/class/rngd_mgmt/rngd\\!${input:npu-id}mgmt/npu_governor'",
+			// "command": "python3 -m scripts.ci.rngd_ci.commands deploy-pert",
 		},
 	],
 

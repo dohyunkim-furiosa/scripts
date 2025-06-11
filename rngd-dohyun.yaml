@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rngd-dohyun
+  namespace: ci-npu-tools
+spec:
+  containers:
+    - name: workspace
+      image: 408994520673.dkr.ecr.ap-northeast-2.amazonaws.com/npu-tools-base:b195ea6ea0
+      imagePullPolicy: IfNotPresent
+      resources:
+        requests:
+          cpu: 50
+          memory: 500Gi
+          furiosa.ai/rngd: 4
+        limits:
+          cpu: 50
+          memory: 500Gi
+          furiosa.ai/rngd: 4
+      tty: true
+      volumeMounts:
+      - mountPath: /rngd-ci-artifacts/
+        name: rngd-ci-artifacts
+  volumes:
+  - name: rngd-ci-artifacts
+    persistentVolumeClaim:
+      claimName: rngd-ci-artifacts
+  imagePullSecrets:
+  - name: artifact-registry-next-gen-infra
+  - name: aws-ecr
+  - name: azure-acr
+  tolerations:
+    - key: "rngd"
+      operator: "Exists"
+      effect: "NoSchedule"

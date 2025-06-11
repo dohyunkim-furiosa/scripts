@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    workspace: dohyunkim
+  name: dohyunkim
+  namespace: software
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      workspace: dohyunkim
+  serviceName: dohyunkim
+  template:
+    metadata:
+      labels:
+        workspace: dohyunkim
+    spec:
+      containers:
+      - image: ubuntu:22.04
+        imagePullPolicy: Always
+        name: workspace
+        resources:
+          limits:
+            cpu: "42"
+            memory: 192Gi
+          requests:
+            cpu: "42"
+            memory: 192Gi
+        tty: true
+        volumeMounts:
+        - mountPath: /root
+          name: dohyunkim
+      imagePullSecrets:
+      - name: artifact-registry-next-gen-infra
+      volumes:
+      - name: dohyunkim
+        persistentVolumeClaim:
+          claimName: dohyunkim
