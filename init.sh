@@ -18,11 +18,12 @@ gh auth login
 
 cd $HOME
 if [ ! -d "$HOME/scripts" ]; then
-    git clone https://github.com/dohyunkim-furiosa/scripts
+    gh repo clone https://github.com/dohyunkim-furiosa/scripts
 else
     echo "$HOME/scripts already exist - clone skipped."
 fi
 chmod +x $HOME/scripts/*
+cp wolfrevo/.gitconfig $HOME/.gitconfig
 
 # create softlinks
 # rm -rf $HOME/.cache

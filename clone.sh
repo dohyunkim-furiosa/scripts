@@ -7,7 +7,7 @@ else
     read NAME
 fi
 if [ ! -d "$HOME/$NAME" ]; then
-    git clone "https://github.com/dohyunkim-furiosa/npu-tools" $NAME
+    gh repo clone clone "https://github.com/dohyunkim-furiosa/npu-tools" $NAME
 else
     echo "$HOME/$NAME already exists. Skipping cloning."
 fi
@@ -34,6 +34,9 @@ ln -s $HOME/scripts wolfrevo
 ln -s /tmp tmp
 ln -s /cache/furiosa-libtorch/ artifacts/furiosa-libtorch/.dvc/cache
 ln -s /cache/llm_dfg_cache/ crates/npu-torch-models/llm_dfg_cache/.dvc/cache
+
+# vscode task settings
+cp wolfrevo/tasks.json .vscode/tasks.json
 
 # install dependencies
 source $HOME/venv/bin/activate
