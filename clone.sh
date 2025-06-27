@@ -39,7 +39,7 @@ ln -s /cache/llm_dfg_cache/ crates/npu-torch-models/llm_dfg_cache/.dvc/cache
 cp wolfrevo/tasks.json .vscode/tasks.json
 
 # install dependencies
-source $HOME/venv/bin/activate
+# source $HOME/venv/bin/activate
 pip3 install -r $HOME/npu-tools/tekton/build/requirements.txt
 dvc --cd artifacts/furiosa-libtorch/jammy pull -r origin -j 10
 cargo install cargo-sort --locked --force

@@ -46,8 +46,8 @@ rustup default nightly
 rustup target add aarch64-unknown-none-softfloat
 
 apt install -y build-essential clang libncurses-dev libssl-dev pkg-config python3-dev python-is-python3 gcc-aarch64-linux-gnu libboost-dev libboost-regex-dev libelf-dev cmake libtbb-dev clang-format-11 clang-tidy libc6-dev-arm64-cross libyaml-cpp-dev libgl1-mesa-glx libcapstone-dev ninja-build
-python3 -m venv venv
-source venv/bin/activate
+# python3 -m venv venv
+# source venv/bin/activate
 pip3 install -U pip wheel setuptools
 pip3 install fbgemm-gpu-cpu 'dvc[azure]'
 

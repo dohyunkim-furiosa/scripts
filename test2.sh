@@ -20,6 +20,7 @@ export LD_LIBRARY_PATH=`pwd`/target/release/deps
 export RUST_LOG=info #tactic_populator=trace,npu_compiler::compile=trace,npu_compiler_dma::dma_estimator=debug
 export TRACING_WITHOUT_TIME=1
 # export RUST_BACKTRACE=1
+# export RUST_LIB_BACKTRACE=0
 ### E2E ###
 # export E2E_TEST_CACHE_STAGE=lir
 # export DUMP_GRAPHS=true
@@ -29,7 +30,8 @@ export TRACING_WITHOUT_TIME=1
 # export DIFF_DEBUGGER="1"
 # export DUMP_TENSOR=1 #TensorIndex
 # export DUMP_DIFF=1
-# export GENERATE_TEST_VECTORS=1
+# export GENERATE_TEST_VECTORS=true
+# export NUM_SAMPLE=20
 # export FIR_TEST_BRIEF_DIFF=false
 # export SKIP_FIR_TEST=true
 # export SKIP_LIR_VERIFIER=true
@@ -54,49 +56,58 @@ PACKAGE=
 PACKAGE="-p npu-test"
 PACKAGE="-p npu-compiler-dma"
 PACKAGE="-p npu-executor-common"
-PACKAGE="-p npu-test-ir"
 PACKAGE="-p npu-compiler"
-PACKAGE="-p tactic-populator"
+PACKAGE="-p npu-test-ir"
 PACKAGE="-p npu-integration-test"
+PACKAGE="-p tactic-populator"
+PACKAGE="-p npu-ir-common"
 PROFILE=fast-debug
 PROFILE=release
 PROFILE=rel-with-deb-info
 PROFILE=dev
-export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-4chip.yml
 # export NPU_DEVNAME=npu0pe0-3,npu0pe4-7
 export NPU_ARCH=nvp
 export RUST_LOG=info\
 ,tactic_populator=trace\
 ,npu_compiler::compile=trace\
-,npu_compiler_dma=debug\
-,npu_compiler_dma::dma_estimator=debug\
+,npu_compiler_dma=trace\
+,npu_compiler_dma::dma_estimator=trace\
 ,npu_compiler_base::cycle_estimator=debug
 export NVP_LOG=info #debug
 export NVP_LOG_STDOUT=1
 export RUST_BACKTRACE=1
+# export RUST_LIB_BACKTRACE=0
 export NO_PARALLEL_ESTIMATE=1
 # export FIR_TEST_BRIEF_DIFF=false
 # export SKIP_FIR_TEST=true
-# export SKIP_LIR_VERIFIER=1
-# export SKIP_SYNC_CHECK=1
+export SKIP_LIR_VERIFIER=true
+# export SKIP_SYNC_CHECK=true
 # export LOG_PATH=$PWD/crates/npu-integration-test/log/tactic_test_gptj_kv_cache_prompt_b1
 # export TACTIC_ID=0
 # export TACTIC_PATH=`pwd`/PreLower_3219_cost_315910_hidable_false_rank_5.yaml
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-4chip.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
-export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
+# export NPU_DEVNAME=npu1pe0-3,npu1pe4-7
+# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
-export DUMP_PE_PROGRAM=code
+# export DUMP_PE_PROGRAM=code
 # export LOAD_PE_PROGRAM=code
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
 test(test_tactic_debug#)|
 test(codegen_test_tensor_dma_gather_1#)|
+test(test_dma_command_spm_#)|
+test(test_dma_command_stos_sram_permute_1#)|
 test(test_dma_command_stos_identity_1#)|
-test(test_dma_command_spm#)|
-test(test_rlir_chip_sync#)|
+test(test_dma_command_spm_identity_1#)|
+test(test_compile_dram_permute_basic#)|
+test(test_rlir_sync_#)|
+test(test_rlir_sync_0#)|
 test(test_rlir_sync_1#)|
-test(test_gather_tactic_table_padding)|
+test(unittest_valid_optimized_original_shape_indexer_3)|
+test(unittest_valid_optimized_original_shape_indexer_4)|
+test(unittest_valid_optimized_original_shape_indexer_5)|
 test(###end###)
-' -- --include-ignored --exact
+' #-- --include-ignored --exact
 
 # #### Release Script #####
 # PACKAGE="-p npu-ir-common"
@@ -105,28 +116,23 @@ test(###end###)
 # PACKAGE="-p tactic-populator"
 # PACKAGE="-p npu-compiler"
 # PROFILE=release
-# export NPU_GLOBAL_CONFIG_PATH=renegade-8pe
+# # export E2E_TEST_RUN_OPERATORWISE_TEST=1
 # export E2E_TEST_CACHE_STAGE=lir
+# export SKIP_FIR_TEST=true
+# export SKIP_LIR_VERIFIER=true
+# export SKIP_SYNC_CHECK=true
 # # export RUST_LOG=info\
 # # ,tactic_populator=trace\
 # # ,npu_compiler::compile=trace\
 # # ,npu_compiler_dma::dma_estimator=debug\
 # # ,npu_compiler_base::cycle_estimator=debug
 # # export NO_PARALLEL_ESTIMATE=1
-
-# # arr=(621 622 623 624 625 626 627 628 629)
-# # for INDEX in "${arr[@]}"; do
-# #     export INDEX=$INDEX
-#     export INDEX_BEGIN=628
-#     export INDEX_END=673
-#     cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
-# test(test_compile_llama3_1_mlperf_latest_8pe_w16a16_prefill_first_block_b1_s1024)
-# -test(test_compile_llama3_1_mlperf_latest_8pe_w16a16_prefill_first_block_b1_s10240_ss)
-# -test(test_compile_llama3_1_mlperf_latest_8pe_w16a16_prefill_first_block_b1_s10240)
+# export NPU_GLOBAL_CONFIG_PATH=renegade-8pe-4chip
+# export NPU_GLOBAL_CONFIG_PATH=renegade-4pe
+# cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
+# test(test_compile_gptj_mlperf_latest_w8fa8f_decode_last_block_b32_s2048)|
+# test(###end###)
 # ' -- --include-ignored --exact
-#     mv crates/npu-compiler/log/test_compile_llama3_1_mlperf_latest_8pe_w16a16_prefill_first_block_b1_s1024.edf \
-#     test_compile_llama3_1_mlperf_latest_8pe_w16a16_prefill_first_block_b1_s1024_${INDEX_BEGIN}_${INDEX_END}.edf
-# # done
 
 
 
@@ -139,31 +145,8 @@ test(###end###)
 # ##### RNGD plot #####
 # cargo run --bin dump_lir_plot lir3.json --output rngd_plot3 --profile profile3.json --type profile
 
-##### Operatorwise log 검사 템플릿 #####
-# git checkout debug
-# for i in $(seq 61 99); do
-#   export LOG_PATH="/root/worktree/crates/npu-compiler/tmp/snapshot/test_profile_gptj_paged_attention_optimized_packed_rope_2l_w8a8_pp2_prefill_first_block_b1_s512/O$i"
-#   echo "Testing $LOG_PATH"
-#   PACKAGE="-p npu-test-ir"
-#   RUST_BACKTRACE=1 RUST_LOG=warn cargo nextest run --nocapture --cargo-profile=dev $PACKAGE -E 'test(test_tactic_debug)' -- --include-ignored &> "test_O${i}_debug.log"
-# done
-# git checkout cddb8e1
-# for i in $(seq 72 99); do
-#   export LOG_PATH="/root/worktree/crates/npu-compiler/tmp/snapshot/test_profile_gptj_paged_attention_optimized_packed_rope_2l_w8a8_pp2_prefill_first_block_b1_s512/O$i"
-#   echo "Testing $LOG_PATH"
-#   PACKAGE="-p npu-test-ir"
-#   RUST_BACKTRACE=1 RUST_LOG=warn cargo nextest run --nocapture --cargo-profile=dev $PACKAGE -E 'test(test_tactic_debug)' -- --include-ignored &> "test_O${i}_cddb8e1.log"
-# done
-
 ##### Tools #####
 # To see stack trace, std::backtrace::Backtrace::force_capture()
 # To see graph, npu_utils::graphviz::GraphLogger::new("wolfrevo.dot").add_with_label(graph, "wolfrevo");
 # To see ir-viewer, graph.dump_json_for_ir_viewer("wolfrevo.json").unwrap();
 
-##### selected tactic #####
-# e2e테스트의 pre_lower_with_selected_tactics.dot 확인
-
-##### Edf 디버그 #####
-# command_graph.expose_activations_in_topological_order();
-# firtest.with_lir_edf_debugger_info + lir edf 디버거
-# C코드나 nvp코드에서 로그 찍기

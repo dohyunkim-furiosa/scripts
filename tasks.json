@@ -22,18 +22,11 @@
 			"type": "shell",
 			"command": "python3 tekton/run_pipeline.py --context aks ${input:commit-hash} ${input:ci-action}",
 		},
-		// origin이랑 furiosa 결정하는 옵션 추가하던지 해야해서 일단 주석처리함.
-		// {
-		// 	"label": "reset and force push to",
-		// 	"type":"shell",
-		// 	"command": "BRANCH=${input:temp-branches} && git branch -f $BRANCH HEAD && git push -f origin $BRANCH"
-		// },
 		{
 			"label": "pert deploy",
 			"type": "shell",
 			"dependsOn": "dependency update",
-			"command": "cargo run --release --bin libnpu-builder --no-default-features --features pert && aarch64-linux-gnu-objcopy -O binary target/pert pe_boot.bin && sudo furiosa_pert_deploy -d ${input:npu-id} -f pe_boot.bin && sudo sh -c 'echo performance > /sys/class/rngd_mgmt/rngd\\!${input:npu-id}mgmt/npu_governor'",
-			// "command": "python3 -m scripts.ci.rngd_ci.commands deploy-pert",
+			"command": "python3 -m scripts.ci.rngd_ci.commands deploy-pert",
 		},
 	],
 
@@ -76,7 +69,7 @@
                 "cancel-pipelines",
                 "run",
                 // "rngd-ci", 이거는 /ci-bot run_rngd_ci 를 써야함. 이거로 실행하면 context가 달라서 할당을 못받는듯.
-                "post-rngd-ci &> slack_ts.txt",
+                "post-rngd-ci slack_ts.txt",
             ],
             "description": "",
         },
