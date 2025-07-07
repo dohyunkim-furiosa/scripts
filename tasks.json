@@ -69,7 +69,7 @@
                 "cancel-pipelines",
                 "run",
                 // "rngd-ci", 이거는 /ci-bot run_rngd_ci 를 써야함. 이거로 실행하면 context가 달라서 할당을 못받는듯.
-                "post-rngd-ci slack_ts.txt",
+                "post-rngd-ci &> slack_ts.txt",
             ],
             "description": "",
         },

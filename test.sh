@@ -58,26 +58,28 @@ PACKAGE="-p npu-test"
 PACKAGE="-p npu-compiler-dma"
 PACKAGE="-p tactic-populator"
 PACKAGE="-p npu-executor-common"
-PACKAGE="-p npu-compiler"
 PACKAGE="-p npu-test-ir"
+PACKAGE="-p npu-compiler"
 PACKAGE="-p npu-integration-test"
 PROFILE=fast-debug
-PROFILE=release
 PROFILE=rel-with-deb-info
+PROFILE=release
 PROFILE=dev
 # export NPU_DEVNAME=npu0pe0-3,npu0pe4-7
 export NPU_ARCH=nvp
+# export RUST_LOG=trace
+# export RUST_LOG=warn
 # export RUST_LOG=info\
 # ,tactic_populator=trace\
 # ,npu_compiler::compile=trace\
 # ,npu_compiler_dma=trace\
 # ,npu_compiler_dma::dma_estimator=trace\
 # ,npu_compiler_base::cycle_estimator=debug
-# export RUST_LOG=trace
+# export RUST_LOG=info,tactic_populator::operator::non_tactic_kernel::gather_scatter=debug
 # export NVP_LOG=info #debug
 # export NVP_LOG_STDOUT=1
 export RUST_BACKTRACE=1
-# export RUST_LIB_BACKTRACE=0
+# export RUST_LIB_BACKTRACE=0 #skip lib crate backtrace for performance
 # export NO_PARALLEL_ESTIMATE=1
 # export FIR_TEST_BRIEF_DIFF=false
 export SKIP_FIR_TEST=true
@@ -85,35 +87,34 @@ export SKIP_LIR_VERIFIER=true
 export SKIP_SYNC_CHECK=true
 # export LOG_PATH=$PWD/crates/npu-integration-test/log/tactic_test_gptj_kv_cache_prompt_b1
 # export TACTIC_ID=0
-# export TACTIC_PATH=`pwd`/PreLower_3219_cost_315910_hidable_false_rank_5.yaml
+# export TACTIC_PATH=`pwd`/rank_1_cost_20532_hidable_false_selected.yaml
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-4chip.yml
-# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
-# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
-export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
+# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
 # export NPU_DEVNAME=npu1pe0-3,npu1pe4-7
 # export DUMP_PE_PROGRAM=code
 # export LOAD_PE_PROGRAM=code
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
 test(test_tactic_debug#)
-|test(codegen_test_tensor_dma_gather_1#)
-|test(unittest_firtest_between_shape_mismatch)
-|test(test_compile_sparse_graph_with_valid_length_1_with_cycle_check)
+|test(test_tactic_from_inferred_graph#)
+|test(test_basic_renegade_command_i4_stovrf)
 |test(###end###)
-' #-- --include-ignored --exact
+' -- --include-ignored
 
 # #### Release Script #####
 # PACKAGE="-p npu-ir-common"
 # PACKAGE="-p npu-compiler-kernelize"
 # PACKAGE="-p tactic-populator"
-# PACKAGE="-p npu-integration-test"
 # PACKAGE="-p npu-compiler"
+# PACKAGE="-p npu-integration-test"
 # PROFILE=release
 # # export E2E_TEST_RUN_OPERATORWISE_TEST=1
 # export E2E_TEST_CACHE_STAGE=ldfg
 # export SKIP_FIR_TEST=true
 # export SKIP_LIR_VERIFIER=true
 # export SKIP_SYNC_CHECK=true
-# export DUMP_PE_PROGRAM=code
+# # export DUMP_PE_PROGRAM=code
 # # export RUST_LOG=info\
 # # ,tactic_populator=trace\
 # # ,npu_compiler::compile=trace\
@@ -122,9 +123,9 @@ test(test_tactic_debug#)
 # # export NO_PARALLEL_ESTIMATE=1
 # export NPU_GLOBAL_CONFIG_PATH=renegade-8pe-4chip
 # # export NPU_GLOBAL_CONFIG_PATH=renegade-8pe
+# export NPU_GLOBAL_CONFIG_PATH=renegade
 # cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
-# test(test_compile_exaone3_5_32b_8pe_4chip_w16a16_decode_last_block_b1_s16384)
-# - test(test_compile_exaone3_5_32b_8pe_4chip_w16a16_decode_last_block_b1_s16384)
+# test(tactic_test_gather_edge_cases_segment_index)
 # | test(###end###)
 # ' -- --include-ignored --exact
 
@@ -145,7 +146,10 @@ test(test_tactic_debug#)
 # To see ir-viewer, graph.dump_json_for_ir_viewer("wolfrevo.json").unwrap();
 
 #### snapshot dump #####
-# let dump_path = <std::path::PathBuf as std::str::FromStr>::from_str("log/debug")?;
+# let _ = std::fs::remove_dir_all(format!("log/{}_snapshot", test_name().unwrap()).as_str());
+# let dump_path = <std::path::PathBuf as std::str::FromStr>::from_str(
+#     format!("log/{}_snapshot", test_name().unwrap()).as_str(),
+# )?;
 # std::fs::create_dir_all(dump_path.as_path())?;
 # npu_compiler::utils::summary::dump::write_snapshot(
 #     &npu_compiler::utils::summary::collect_compile_summary(|| {
