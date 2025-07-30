@@ -10,7 +10,7 @@
 		{
 			"label": "dependency update",
 			"type": "shell",
-			"command": "git submodule deinit --all -f && git submodule update --recursive --init --force && cargo use_renegade -r",
+			"command": "dvc --cd artifacts/furiosa-libtorch/jammy pull -r origin -j 10 && git submodule deinit --all -f && git submodule update --recursive --init --force && cargo use_renegade -r",
 		},
 		{
 			"label": "credential update",
@@ -69,7 +69,7 @@
                 "cancel-pipelines",
                 "run",
                 // "rngd-ci", 이거는 /ci-bot run_rngd_ci 를 써야함. 이거로 실행하면 context가 달라서 할당을 못받는듯.
-                "post-rngd-ci &> slack_ts.txt",
+                "post-rngd-ci slack_ts.txt",
             ],
             "description": "",
         },

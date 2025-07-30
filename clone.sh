@@ -42,7 +42,7 @@ cp wolfrevo/tasks.json .vscode/tasks.json
 # source $HOME/venv/bin/activate
 pip3 install -r $HOME/npu-tools/tekton/build/requirements.txt
 dvc --cd artifacts/furiosa-libtorch/jammy pull -r origin -j 10
-cargo install cargo-sort --locked --force
+cargo install cargo-sort --version=1.0.9 --locked --force
 cargo install cargo-nextest --locked --force
 
 echo "TODO:

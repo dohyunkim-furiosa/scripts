@@ -19,6 +19,8 @@ export LD_LIBRARY_PATH=`pwd`/target/release/deps
 # export NVP_CHROME_TRACING=1
 export RUST_LOG=info #tactic_populator=trace,npu_compiler::compile=trace,npu_compiler_dma::dma_estimator=debug
 export TRACING_WITHOUT_TIME=1
+# export NUM_DUMP_TACTICS=30
+# export RUST_MIN_STACK=todo
 # export RUST_BACKTRACE=1
 # export RUST_LIB_BACKTRACE=0
 ### E2E ###
@@ -37,6 +39,7 @@ export TRACING_WITHOUT_TIME=1
 # export SKIP_FIR_TEST=true
 # export SKIP_LIR_VERIFIER=true
 # export SKIP_SYNC_CHECK=true
+# export SELECTED_SERIALIZED_TACTIC_PATH=`pwd`
 ### C code ###
 # export DUMP_PE_PROGRAM=code
 # export LOAD_PE_PROGRAM=code
@@ -51,53 +54,53 @@ export TRACING_WITHOUT_TIME=1
 
 
 ##### Debug Script #####
-PACKAGE="-p npu-ir-common"
 PACKAGE="-p command-gen"
 PACKAGE=
 PACKAGE="-p npu-test"
-PACKAGE="-p npu-compiler-dma"
 PACKAGE="-p npu-executor-common"
-PACKAGE="-p npu-test-ir"
+PACKAGE="-p npu-compiler-dma"
+PACKAGE="-p npu-ir-common"
 PACKAGE="-p tactic-populator"
 PACKAGE="-p npu-compiler"
 PACKAGE="-p npu-integration-test"
-PROFILE=fast-debug
-PROFILE=rel-with-deb-info
+PACKAGE="-p npu-test-ir"
 PROFILE=release
 PROFILE=dev
+PROFILE=fast-debug
 # export NPU_DEVNAME=npu0pe0-3,npu0pe4-7
 export NPU_ARCH=nvp
-# export RUST_LOG=info\
-# ,tactic_populator=trace\
-# ,npu_compiler::compile=trace\
-# ,npu_compiler_dma=trace\
-# ,npu_compiler_dma::dma_estimator=trace\
-# ,npu_compiler_base::cycle_estimator=debug
-# export RUST_LOG=trace
-# export NVP_LOG=info #debug
+# export NVP_LOG=info
 # export NVP_LOG_STDOUT=1
-export RUST_BACKTRACE=1
-# export RUST_LIB_BACKTRACE=0
+# export RUST_LOG=info,[dma_commandgen]=debug,[dma_tactic]=debug
+# export RUST_LOG=info,tactic_populator::operator::non_tactic_kernel::gather_scatter=debug
+# export RUST_LOG=trace
+# export RUST_LOG=info\
+# ,npu_compiler_dma=debug\
+# ,npu_compiler_base=debug
+# export RUST_BACKTRACE=1
+# export RUST_LIB_BACKTRACE=0 #skip lib crate backtrace for performance
 # export NO_PARALLEL_ESTIMATE=1
 # export FIR_TEST_BRIEF_DIFF=false
-export SKIP_FIR_TEST=true
+# export SKIP_FIR_TEST=true
 export SKIP_LIR_VERIFIER=true
 export SKIP_SYNC_CHECK=true
-# export LOG_PATH=$PWD/crates/npu-integration-test/log/tactic_test_gptj_kv_cache_prompt_b1
-# export TACTIC_ID=0
-# export TACTIC_PATH=`pwd`/PreLower_3219_cost_315910_hidable_false_rank_5.yaml
+# export LOG_PATH=`pwd`/crates/npu-integration-test/log/tactic_test_scatter_2
+# export TACTIC_ID=2
+export TACTIC_PATH=`pwd`/1_cost_84624_hidable_false.yaml
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-4chip.yml
-# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
-export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
+# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
 # export NPU_DEVNAME=npu1pe0-3,npu1pe4-7
 # export DUMP_PE_PROGRAM=code
 # export LOAD_PE_PROGRAM=code
-cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
-test(test_tactic_debug#)
-|test(test_basic_renegade_command_i4_stovrf)
+cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '    
+test(test_tactic_from_inferred_graph)
+|test(tactic_test_gather_edge_cases_split)
 |test(###end###)
-' #-- --include-ignored --exact
+' -- --include-ignored
+
+
 
 # #### Release Script #####
 # PACKAGE="-p npu-ir-common"
@@ -105,28 +108,35 @@ test(test_tactic_debug#)
 # PACKAGE="-p tactic-populator"
 # PACKAGE="-p npu-integration-test"
 # PACKAGE="-p npu-compiler"
+# # PROFILE=dev
+# # PROFILE=fast-debug
 # PROFILE=release
+# export SELECTED_SERIALIZED_TACTIC_PATH=`pwd`/selected_tactics/serializedd
 # # export E2E_TEST_RUN_OPERATORWISE_TEST=1
 # # export E2E_TEST_CACHE_STAGE=ldfg
 # export SKIP_FIR_TEST=true
 # export SKIP_LIR_VERIFIER=true
 # export SKIP_SYNC_CHECK=true
 # # export DUMP_PE_PROGRAM=code
+# # export NUM_DUMP_TACTICS=200
 # # export RUST_LOG=info\
-# # ,tactic_populator=trace\
-# # ,npu_compiler::compile=trace\
-# # ,npu_compiler_dma::dma_estimator=debug\
-# # ,npu_compiler_base::cycle_estimator=debug
+# # ,npu_compiler_dma=debug\
+# # ,npu_compiler_base=debug
+# # export RUST_LOG=[populate_failure]=trace,[estimate_failure]=trace
+# # export RUST_LOG=
+# export RUST_LOG=info,[dma_tactic]=debug
 # # export NO_PARALLEL_ESTIMATE=1
 # export NPU_GLOBAL_CONFIG_PATH=renegade-8pe-4chip
-# # export NPU_GLOBAL_CONFIG_PATH=renegade-8pe
+# export NPU_GLOBAL_CONFIG_PATH=renegade-8pe
 # # export NPU_GLOBAL_CONFIG_PATH=renegade-4pe
+# # export NPU_GLOBAL_CONFIG_PATH=renegade
+# # export RUST_MIN_STACK=1073741824 # 1G
+# # export RUST_BACKTRACE=1
+# # export RUST_LIB_BACKTRACE=0 #skip lib crate backtrace for performance
 # cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
-# test(test_compile_gptj_mlperf_latest_w8fa8f_decode_mid_block_b32_s2048)
-# | test(###end###)
+# test(test_compile_llama3_1_8b_mlperf_latest_8pe_w16a16_decode_first_block_b16_s11264)
+# |test(###end###)
 # ' -- --include-ignored --exact
-
-
 
 
 
@@ -143,7 +153,10 @@ test(test_tactic_debug#)
 # To see ir-viewer, graph.dump_json_for_ir_viewer("wolfrevo.json").unwrap();
 
 #### snapshot dump #####
-# let dump_path = <std::path::PathBuf as std::str::FromStr>::from_str("log/debug")?;
+# let _ = std::fs::remove_dir_all(format!("log/{}_snapshot", test_name().unwrap()).as_str());
+# let dump_path = <std::path::PathBuf as std::str::FromStr>::from_str(
+#     format!("log/{}_snapshot", test_name().unwrap()).as_str(),
+# )?;
 # std::fs::create_dir_all(dump_path.as_path())?;
 # npu_compiler::utils::summary::dump::write_snapshot(
 #     &npu_compiler::utils::summary::collect_compile_summary(|| {
