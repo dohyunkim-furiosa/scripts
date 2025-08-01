@@ -60,24 +60,24 @@ PACKAGE="-p npu-test"
 PACKAGE="-p npu-executor-common"
 PACKAGE="-p npu-compiler-dma"
 PACKAGE="-p npu-ir-common"
-PACKAGE="-p tactic-populator"
 PACKAGE="-p npu-compiler"
-PACKAGE="-p npu-integration-test"
 PACKAGE="-p npu-test-ir"
+PACKAGE="-p tactic-populator"
+PACKAGE="-p npu-integration-test"
+PROFILE=fast-debug
 PROFILE=release
 PROFILE=dev
-PROFILE=fast-debug
 # export NPU_DEVNAME=npu0pe0-3,npu0pe4-7
 export NPU_ARCH=nvp
 # export NVP_LOG=info
 # export NVP_LOG_STDOUT=1
-# export RUST_LOG=info,[dma_commandgen]=debug,[dma_tactic]=debug
+export RUST_LOG=info,[dma_commandgen]=debug,[dma_tactic]=debug
 # export RUST_LOG=info,tactic_populator::operator::non_tactic_kernel::gather_scatter=debug
 # export RUST_LOG=trace
 # export RUST_LOG=info\
 # ,npu_compiler_dma=debug\
 # ,npu_compiler_base=debug
-# export RUST_BACKTRACE=1
+export RUST_BACKTRACE=1
 # export RUST_LIB_BACKTRACE=0 #skip lib crate backtrace for performance
 # export NO_PARALLEL_ESTIMATE=1
 # export FIR_TEST_BRIEF_DIFF=false
@@ -86,17 +86,19 @@ export SKIP_LIR_VERIFIER=true
 export SKIP_SYNC_CHECK=true
 # export LOG_PATH=`pwd`/crates/npu-integration-test/log/tactic_test_scatter_2
 # export TACTIC_ID=2
-export TACTIC_PATH=`pwd`/1_cost_84624_hidable_false.yaml
+export TACTIC_PATH=`pwd`/crates/npu-integration-test/log/tactic_test_gather_edge_cases_segment_index/tactic/16_cost_437402_hidable_false.yaml
+
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-4chip.yml
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
-# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
-# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
 # export NPU_DEVNAME=npu1pe0-3,npu1pe4-7
 # export DUMP_PE_PROGRAM=code
 # export LOAD_PE_PROGRAM=code
-cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '    
+cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
 test(test_tactic_from_inferred_graph)
-|test(tactic_test_gather_edge_cases_split)
+|test(tactic_test_gather_edge_cases_segment_index#1pe)
+|test(test_compile_low_level_unlower_regression_4)
 |test(###end###)
 ' -- --include-ignored
 
@@ -111,7 +113,7 @@ test(test_tactic_from_inferred_graph)
 # # PROFILE=dev
 # # PROFILE=fast-debug
 # PROFILE=release
-# export SELECTED_SERIALIZED_TACTIC_PATH=`pwd`/selected_tactics/serializedd
+# export SELECTED_SERIALIZED_TACTIC_PATH=`pwd`/selected_tacticsasdf
 # # export E2E_TEST_RUN_OPERATORWISE_TEST=1
 # # export E2E_TEST_CACHE_STAGE=ldfg
 # export SKIP_FIR_TEST=true
@@ -134,7 +136,7 @@ test(test_tactic_from_inferred_graph)
 # # export RUST_BACKTRACE=1
 # # export RUST_LIB_BACKTRACE=0 #skip lib crate backtrace for performance
 # cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
-# test(test_compile_llama3_1_8b_mlperf_latest_8pe_w16a16_decode_first_block_b16_s11264)
+# test(test_compile_llama3_1_8b_mlperf_latest_8pe_w8fa8f_decode_mid_block_b1_s11264)
 # |test(###end###)
 # ' -- --include-ignored --exact
 
