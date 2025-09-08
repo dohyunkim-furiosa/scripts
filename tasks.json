@@ -28,6 +28,12 @@
 			"dependsOn": "dependency update",
 			"command": "python3 -m scripts.ci.rngd_ci.commands deploy-pert",
 		},
+		{
+			"label": "remove log files",
+			"type": "shell",
+			"dependsOn": "",
+			"command": "find . -type d -path 'crates/furiosa-runtime/*log' -prune -o -regex '.*/log/.*|.*/tmp/.*|.*\\.log' -exec rm -rf {} +",
+		}
 	],
 
     "inputs": [

@@ -23,13 +23,11 @@ if ! git remote | grep -q '^furiosa$'; then
 fi
 
 # softlink settings
-rm -rf target wolfrevo tmp
+rm -rf wolfrevo tmp
 rm -rf artifacts/furiosa-libtorch/.dvc/cache crates/npu-torch-models/llm_dfg_cache/.dvc/cache
 rm -rf crates/npu-torch-models/llm_dfg_cache/.dvc/cache
-mkdir -p /target/$NAME
 mkdir -p /cache/furiosa-libtorch
 mkdir -p /cache/llm_dfg_cache
-ln -s /target/$NAME target
 ln -s $HOME/scripts wolfrevo
 ln -s /tmp tmp
 ln -s /cache/furiosa-libtorch/ artifacts/furiosa-libtorch/.dvc/cache
