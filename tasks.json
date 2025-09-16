@@ -10,29 +10,29 @@
 		{
 			"label": "dependency update",
 			"type": "shell",
-			"command": "dvc --cd artifacts/furiosa-libtorch/jammy pull -r origin -j 10 && git submodule deinit --all -f && git submodule update --recursive --init --force && cargo use_renegade -r",
+			"command": "dvc --cd artifacts/furiosa-libtorch/jammy pull -r origin -j 10 && git submodule deinit --all -f && git submodule update --recursive --init --force && cargo use_renegade -r"
 		},
 		{
 			"label": "credential update",
 			"type": "shell",
-			"command": "xdg-open ${input:credential-links}",
+			"command": "xdg-open ${input:credential-links}"
 		},
 		{
 			"label": "ci trigger",
 			"type": "shell",
-			"command": "python3 -m ci.tekton.run_pipeline ${input:commit-hash} ${input:ci-action}",
+			"command": "python3 -m ci.tekton.run_pipeline ${input:commit-hash} ${input:ci-action}"
 		},
 		{
 			"label": "pert deploy",
 			"type": "shell",
 			"dependsOn": "dependency update",
-			"command": "python3 -m scripts.ci.rngd_ci.commands deploy-pert",
+			"command": "python3 -m scripts.ci.rngd_ci.commands deploy-pert"
 		},
 		{
-			"label": "remove log files",
+			"label": "log clean up",
 			"type": "shell",
 			"dependsOn": "",
-			"command": "find . -type d -path 'crates/furiosa-runtime/*log' -prune -o -regex '.*/log/.*|.*/tmp/.*|.*\\.log' -exec rm -rf {} +",
+			"command": "find . -path './crates/furiosa-runtime' -prune -o -regex '.*/log/.*\\|.*/tmp/.*\\|.*\\.log' -exec rm -rf {} +",
 		},
 		{
 			"label": "disk usage",
@@ -50,6 +50,8 @@
             "options": [
                 "npu0",
                 "npu1",
+                "npu2",
+                "npu3",
             ],
             "description": "",
         },
@@ -57,19 +59,6 @@
             "id": "commit-hash",
             "type": "promptString",
             "default": "HEAD",
-            "description": "",
-        },
-        {
-            "id": "temp-branches",
-            "type": "pickString",
-            "default": "test1",
-			"options":[
-				"wip",
-				"test0",
-				"test1",
-				"rngd-ci/test-dohyun",
-				"rngd-ci/test-dohyun-2"
-			],
             "description": "",
         },
         {
@@ -140,20 +129,5 @@
             ],
             "description": "",
         },
-		// {
-		// 	"id":"redirect",
-		// 	"type": "pickString",
-		// 	"default": "&> test.log",
-		// 	"options":[
-		// 		{
-		// 			"label": "stdout",
-		// 			"value": ""
-		// 		},{
-		// 			"label": "test.log",
-		// 			"value": "&> test.log"
-		// 		}
-		// 	],
-		// 	"description": ""
-		// },
     ]
 }
