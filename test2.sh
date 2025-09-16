@@ -129,18 +129,18 @@ PROFILE=dev
 ### dump configs ###
 # export LOG_PATH=`pwd`/crates/npu-integration-test/log/tactic_test_scatter_2
 # export TACTIC_ID=2
-# export TACTIC_PATH=`pwd`/PreLower_4005.yaml
+# export TACTIC_PATH=`pwd`/PreLower_4297.yaml
 # export SELECTED_SERIALIZED_TACTIC_PATH=`pwd`/tactics
 # export DUMP_PE_PROGRAM=code
 # export LOAD_PE_PROGRAM=code
 # export NUM_DUMP_TACTICS=200
 # export E2E_TEST_CACHE_STAGE=ldfg
-export DUMP_SCHEDULE_GRAPH=s.dot
+# export DUMP_SCHEDULE_GRAPH=sch.dot
 
 ### run configs ###
 # export E2E_TEST_RUN_OPERATORWISE_TEST=1
 # export NO_PARALLEL_ESTIMATE=1
-export SKIP_FIR_TEST=true
+# export SKIP_FIR_TEST=true
 export SKIP_LIR_VERIFIER=true
 export SKIP_SYNC_CHECK=true
 # export RUST_LIB_BACKTRACE=0 #skip lib crate backtrace for performance
@@ -148,21 +148,27 @@ export NPU_ARCH=nvp
 # export NPU_DEVNAME=npu1pe0-3,npu1pe4-7
 # export RUST_MIN_STACK=1073741824 # 1G
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-4chip.yml
-# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-2chip.yml
-# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-2chip.yml
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
 export RUST_BACKTRACE=1
-PACKAGE="-p npu-compiler"
-# PROFILE=release
+# PACKAGE="-p npu-compiler"
+PROFILE=fast-debug
 
+# export PERT_HW_NOTIFY_MAP=256
+# export ENABLE_POPULATOR_RECORD=1
+export DUMP_TENSOR=21
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
 test(test_tactic_from_inferred_graph)
-|test(unittest_bulk_weight_load_)
+|test(test_compile_scatter_2)
 ' -- --include-ignored
+# |test(test_gather_tactic_gpt_oss_embedding_lookup)
+# |test(test_gather_tactic_gpt_oss_rope_lookup)
 
 
 ### gather ###
+# |test(test_gather_tactic_small_)
 # |test(codegen_test_tensor_dma_gather_)
 # |test(tactic_test_gather_small)
 # |test(tactic_test_gather_oss_bias)

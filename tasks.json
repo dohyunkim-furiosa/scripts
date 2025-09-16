@@ -20,7 +20,7 @@
 		{
 			"label": "ci trigger",
 			"type": "shell",
-			"command": "python3 tekton/run_pipeline.py --context aks ${input:commit-hash} ${input:ci-action}",
+			"command": "python3 -m ci.tekton.run_pipeline ${input:commit-hash} ${input:ci-action}",
 		},
 		{
 			"label": "pert deploy",
@@ -33,6 +33,12 @@
 			"type": "shell",
 			"dependsOn": "",
 			"command": "find . -type d -path 'crates/furiosa-runtime/*log' -prune -o -regex '.*/log/.*|.*/tmp/.*|.*\\.log' -exec rm -rf {} +",
+		},
+		{
+			"label": "disk usage",
+			"type": "shell",
+			"dependsOn": "",
+			"command": "du -h --max-depth=3 ~ | sort -rh | head -n 10"
 		}
 	],
 
