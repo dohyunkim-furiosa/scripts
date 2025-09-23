@@ -16,7 +16,7 @@ export LD_LIBRARY_PATH=`pwd`/target/release/deps
 # export NVP_LOG=info #debug
 # export NVP_LOG_STDOUT=1
 # export NVP_LOG_PATH=./nvp.log
-# export NVP_MEMORY_INIT=1 #4byte decimal
+export NVP_MEMORY_INIT=2882400255 # 0xABCDEFFF, 4byte decimal
 # export NVP_CHROME_TRACING=1
 export RUST_LOG=info #tactic_populator=trace,npu_compiler::compile=trace,npu_compiler_dma::dma_estimator=debug
 export TRACING_WITHOUT_TIME=1
@@ -42,9 +42,11 @@ export TRACING_WITHOUT_TIME=1
 # export SKIP_LIR_VERIFIER=true
 # export SKIP_SYNC_CHECK=true
 # export SELECTED_SERIALIZED_TACTIC_PATH=`pwd`/selected_tacticsasdf
+# export FORCE_WAIT_BEGIN=0
+# export FORCE_WAIT_END=987654321
 ### C code ###
-# export DUMP_PE_PROGRAM=code
-# export LOAD_PE_PROGRAM=code
+export DUMP_PE_PROGRAM=`pwd`/code
+# export LOAD_PE_PROGRAM=`pwd`/code
 ### Tactic Test ###
 # export TACTIC_PATH=`pwd`/serialized/PreLower_4764.yaml
 # export LOG_PATH=$PWD/test_compile_llama3_1_mlperf_latest_w8fa8f_decode_mid_block_b32_s2048/O63
@@ -112,8 +114,8 @@ PACKAGE="-p tactic-populator"
 PACKAGE="-p npu-compiler"
 PACKAGE="-p npu-integration-test"
 PROFILE=fast-debug
-PROFILE=release
 PROFILE=dev
+PROFILE=release
 
 ### log configs ###
 # export RUST_LOG=debug
@@ -123,8 +125,8 @@ PROFILE=dev
 # export RUST_LOG=info\
 # ,npu_compiler_dma=debug\
 # ,npu_compiler_base=debug
-export NVP_LOG=debug
-export NVP_LOG_STDOUT=1
+# export NVP_LOG=info #debug
+# export NVP_LOG_STDOUT=1
 # export FIR_TEST_BRIEF_DIFF=false
 
 ### dump configs ###
@@ -132,8 +134,6 @@ export NVP_LOG_STDOUT=1
 # export TACTIC_ID=18
 # export TACTIC_PATH=`pwd`/PreLower_4297.yaml
 # export SELECTED_SERIALIZED_TACTIC_PATH=`pwd`/tactics
-# export DUMP_PE_PROGRAM=code
-# export LOAD_PE_PROGRAM=code
 # export NUM_DUMP_TACTICS=200
 # export E2E_TEST_CACHE_STAGE=ldfg
 # export DUMP_SCHEDULE_GRAPH=sch.dot
@@ -151,18 +151,17 @@ export NPU_ARCH=nvp
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-4chip.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-2chip.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
-# # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
+# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
-export RUST_BACKTRACE=1
-# PACKAGE="-p npu-compiler"
+# export RUST_BACKTRACE=1
+PACKAGE="-p tactic-populator"
 # PROFILE=fast-debug
 
 # export PERT_HW_NOTIFY_MAP=256
 # export ENABLE_POPULATOR_RECORD=1
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
 test(test_tactic_from_inferred_graph#)
-|test(test_compile_block_sparse_moe_w16a16#)
-|test(test_rlir_loop_1)
+|test(unittest_indirect_lower_3)
 ' -- --include-ignored
 
 

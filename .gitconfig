@@ -34,8 +34,6 @@ autoupdate = true
 [core]  
 excludesfile = ~/.gitignore  
 [rebase]  
-autoSquash = true  
-autoStash = true  
 updateRefs = true  
 
 # 파일 변경 감지 속도 향상 (optional)
