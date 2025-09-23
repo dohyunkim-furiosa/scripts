@@ -45,6 +45,7 @@ export TRACING_WITHOUT_TIME=1
 # export FORCE_WAIT_BEGIN=0
 # export FORCE_WAIT_END=987654321
 ### C code ###
+export DEDUP_TASK_COMMANDS=false
 export DUMP_PE_PROGRAM=`pwd`/code
 # export LOAD_PE_PROGRAM=`pwd`/code
 ### Tactic Test ###
