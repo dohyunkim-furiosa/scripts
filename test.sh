@@ -13,6 +13,7 @@ export LD_LIBRARY_PATH=`pwd`/target/release/deps
 # export TUC_PROFILE_LEVEL="debug"
 # export ENABLE_PERT_PROFILE=1
 # export PERT_LOG=debug
+# export PERT_HW_NOTIFY_MAP=256
 # export NVP_LOG=info #debug
 # export NVP_LOG_STDOUT=1
 # export NVP_LOG_PATH=./nvp.log
@@ -44,10 +45,12 @@ export TRACING_WITHOUT_TIME=1
 # export SELECTED_SERIALIZED_TACTIC_PATH=`pwd`/selected_tacticsasdf
 # export FORCE_WAIT_BEGIN=0
 # export FORCE_WAIT_END=987654321
+# export DUMP_SCHEDULE_GRAPH=sch.dot
+# export ENABLE_POPULATOR_RECORD=1
 ### C code ###
-export DEDUP_TASK_COMMANDS=false
-export DUMP_PE_PROGRAM=`pwd`/code
-# export LOAD_PE_PROGRAM=`pwd`/code
+# export DEDUP_TASK_COMMANDS=false
+# export DUMP_PE_PROGRAM=`pwd`/z
+# export LOAD_PE_PROGRAM=`pwd`/z
 ### Tactic Test ###
 # export TACTIC_PATH=`pwd`/serialized/PreLower_4764.yaml
 # export LOG_PATH=$PWD/test_compile_llama3_1_mlperf_latest_w8fa8f_decode_mid_block_b32_s2048/O63
@@ -115,8 +118,8 @@ PACKAGE="-p tactic-populator"
 PACKAGE="-p npu-compiler"
 PACKAGE="-p npu-integration-test"
 PROFILE=fast-debug
-PROFILE=dev
 PROFILE=release
+PROFILE=dev
 
 ### log configs ###
 # export RUST_LOG=debug
@@ -138,6 +141,9 @@ PROFILE=release
 # export NUM_DUMP_TACTICS=200
 # export E2E_TEST_CACHE_STAGE=ldfg
 # export DUMP_SCHEDULE_GRAPH=sch.dot
+export DEDUP_TASK_COMMANDS=false
+export DUMP_PE_PROGRAM=`pwd`/z
+# export LOAD_PE_PROGRAM=`pwd`/z
 
 ### run configs ###
 # export E2E_TEST_RUN_OPERATORWISE_TEST=1
@@ -155,14 +161,12 @@ export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-4chip.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
 # export RUST_BACKTRACE=1
-PACKAGE="-p tactic-populator"
+# PACKAGE="-p tactic-populator"
 # PROFILE=fast-debug
 
-# export PERT_HW_NOTIFY_MAP=256
-# export ENABLE_POPULATOR_RECORD=1
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
 test(test_tactic_from_inferred_graph#)
-|test(unittest_indirect_lower_3)
+|test(test_compile_tensor_dma_identity_using_sram_and_scratchpad_1)
 ' -- --include-ignored
 
 

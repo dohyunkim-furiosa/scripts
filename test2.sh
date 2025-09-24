@@ -45,9 +45,9 @@ export TRACING_WITHOUT_TIME=1
 # export FORCE_WAIT_BEGIN=0
 # export FORCE_WAIT_END=987654321
 ### C code ###
-export DEDUP_TASK_COMMANDS=false
-export DUMP_PE_PROGRAM=`pwd`/code
-# export LOAD_PE_PROGRAM=`pwd`/code
+# export DEDUP_TASK_COMMANDS=false
+# export DUMP_PE_PROGRAM=`pwd`/z
+# export LOAD_PE_PROGRAM=`pwd`/z
 ### Tactic Test ###
 # export TACTIC_PATH=`pwd`/serialized/PreLower_4764.yaml
 # export LOG_PATH=$PWD/test_compile_llama3_1_mlperf_latest_w8fa8f_decode_mid_block_b32_s2048/O63
@@ -115,8 +115,8 @@ PACKAGE="-p tactic-populator"
 PACKAGE="-p npu-compiler"
 PACKAGE="-p npu-integration-test"
 PROFILE=fast-debug
-PROFILE=dev
 PROFILE=release
+PROFILE=dev
 
 ### log configs ###
 # export RUST_LOG=debug
@@ -130,7 +130,7 @@ PROFILE=release
 # export NVP_LOG_STDOUT=1
 # export FIR_TEST_BRIEF_DIFF=false
 
-### dump configs ###
+### dump & load configs ###
 # export LOG_PATH=`pwd`/crates/npu-integration-test/log/tactic_test_scatter_oss_index_put
 # export TACTIC_ID=18
 # export TACTIC_PATH=`pwd`/PreLower_4297.yaml
@@ -138,6 +138,9 @@ PROFILE=release
 # export NUM_DUMP_TACTICS=200
 # export E2E_TEST_CACHE_STAGE=ldfg
 # export DUMP_SCHEDULE_GRAPH=sch.dot
+export DEDUP_TASK_COMMANDS=false
+export DUMP_PE_PROGRAM=`pwd`/z
+# export LOAD_PE_PROGRAM=`pwd`/z
 
 ### run configs ###
 # export E2E_TEST_RUN_OPERATORWISE_TEST=1
@@ -154,16 +157,17 @@ export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-4chip.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
-# export RUST_BACKTRACE=1
-PACKAGE="-p tactic-populator"
-# PROFILE=fast-debug
+export RUST_BACKTRACE=1
+# PACKAGE="-p tactic-populator"
+PROFILE=fast-debug
 
 # export PERT_HW_NOTIFY_MAP=256
 # export ENABLE_POPULATOR_RECORD=1
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
 test(test_tactic_from_inferred_graph#)
-|test(unittest_indirect_lower_3)
+|test(test_dma_by_shape_1)
 ' -- --include-ignored
+
 
 
 ### gather ###
