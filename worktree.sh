@@ -19,18 +19,9 @@ git worktree add "../$NAME"
 mkdir -p /target/$NAME
 mkdir -p /cache/furiosa-libtorch
 mkdir -p /cache/llm_dfg_cache
-ln -s /target/$NAME $HOME/$NAME/target # 이거 잘 안되고있는것 같다?
 ln -s $HOME/scripts $HOME/$NAME/wolfrevo
 ln -s /tmp $HOME/$NAME/tmp
-
+ln -s $HOME/npu-tools/crates/npu-torch-models/llm_dfg_cache/.dvc/cache $HOME/$NAME/crates/npu-torch-models/llm_dfg_cache/.dvc/cache
+ln -s $HOME/npu-tools/artifacts/furiosa-libtorch/.dvc/cache $HOME/$NAME/artifacts/furiosa-libtorch/.dvc/cache
 
 cd $HOME/$NAME
-git submodule update --recursive --init --force
-
-echo "
-TODO:
-  1. Follow the instructions in https://github.com/furiosa-ai/npu-tools/blob/master/README.md
-    * update aws credential at https://aws-cli.furiosa.dev
-    * dvc --cd artifacts/furiosa-libtorch/jammy pull -r origin -j 10
-  2. cargo use_renegade -r && cargo build
-"

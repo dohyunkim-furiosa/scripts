@@ -144,6 +144,7 @@ PROFILE=dev
 export DEDUP_TASK_COMMANDS=false
 export DUMP_PE_PROGRAM=`pwd`/z
 # export LOAD_PE_PROGRAM=`pwd`/z
+export DUMP_TENSOR=1 #TensorIndex
 
 ### run configs ###
 # export E2E_TEST_RUN_OPERATORWISE_TEST=1
@@ -160,13 +161,13 @@ export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-4chip.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
-# export RUST_BACKTRACE=1
-# PACKAGE="-p tactic-populator"
+export RUST_BACKTRACE=1
+# PACKAGE="-p npu-compiler"
 # PROFILE=fast-debug
 
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
 test(test_tactic_from_inferred_graph#)
-|test(test_compile_tensor_dma_identity_using_sram_and_scratchpad_1)
+|test(test_low_level_bitnot_1)
 ' -- --include-ignored
 
 

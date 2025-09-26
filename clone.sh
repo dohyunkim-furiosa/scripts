@@ -24,14 +24,8 @@ fi
 
 # softlink settings
 rm -rf wolfrevo tmp
-rm -rf artifacts/furiosa-libtorch/.dvc/cache crates/npu-torch-models/llm_dfg_cache/.dvc/cache
-rm -rf crates/npu-torch-models/llm_dfg_cache/.dvc/cache
-mkdir -p /cache/furiosa-libtorch
-mkdir -p /cache/llm_dfg_cache
 ln -s $HOME/scripts wolfrevo
 ln -s /tmp tmp
-ln -s /cache/furiosa-libtorch/ artifacts/furiosa-libtorch/.dvc/cache
-ln -s /cache/llm_dfg_cache/ crates/npu-torch-models/llm_dfg_cache/.dvc/cache
 
 # vscode task settings
 cp wolfrevo/tasks.json .vscode/tasks.json
