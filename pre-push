@@ -2,6 +2,6 @@
 set -e
 # .git/hooks/pre-push
 cargo fmt --all -- --check
-cargo clippy --profile clippy --all-targets --no-deps -- -D warnings -D rust_2018_idioms
+cargo clippy --profile dev --all-targets --no-deps -- -D warnings -D rust_2018_idioms
 cargo sort --grouped --check --workspace
 ruff format --check --diff .

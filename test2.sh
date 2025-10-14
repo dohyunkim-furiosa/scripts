@@ -13,6 +13,7 @@ export LD_LIBRARY_PATH=`pwd`/target/release/deps
 # export TUC_PROFILE_LEVEL="debug"
 # export ENABLE_PERT_PROFILE=1
 # export PERT_LOG=debug
+# export PERT_HW_NOTIFY_MAP=256
 # export NVP_LOG=info #debug
 # export NVP_LOG_STDOUT=1
 # export NVP_LOG_PATH=./nvp.log
@@ -44,6 +45,8 @@ export TRACING_WITHOUT_TIME=1
 # export SELECTED_SERIALIZED_TACTIC_PATH=`pwd`/selected_tacticsasdf
 # export FORCE_WAIT_BEGIN=0
 # export FORCE_WAIT_END=987654321
+# export DUMP_SCHEDULE_GRAPH=sch.dot
+# export ENABLE_POPULATOR_RECORD=1
 ### C code ###
 # export DEDUP_TASK_COMMANDS=false
 # export DUMP_PE_PROGRAM=`pwd`/z
@@ -96,6 +99,13 @@ export TRACING_WITHOUT_TIME=1
 # ccc.add(&bbb);
 # ccc.dump()?;
 
+##### c code #####
+# export DEDUP_TASK_COMMANDS=false
+# export DUMP_PE_PROGRAM=`pwd`/z
+# export LOAD_PE_PROGRAM=`pwd`/z
+# export NVP_LOG=debug
+# export NVP_LOG_STDOUT=1
+# printf("L%d: ###\n", __LINE__);
 
 
 
@@ -126,11 +136,9 @@ PROFILE=dev
 # export RUST_LOG=info\
 # ,npu_compiler_dma=debug\
 # ,npu_compiler_base=debug
-# export NVP_LOG=info #debug
-# export NVP_LOG_STDOUT=1
 # export FIR_TEST_BRIEF_DIFF=false
 
-### dump & load configs ###
+### dump configs ###
 # export LOG_PATH=`pwd`/crates/npu-integration-test/log/tactic_test_scatter_oss_index_put
 # export TACTIC_ID=18
 # export TACTIC_PATH=`pwd`/PreLower_4297.yaml
@@ -138,9 +146,7 @@ PROFILE=dev
 # export NUM_DUMP_TACTICS=200
 # export E2E_TEST_CACHE_STAGE=ldfg
 # export DUMP_SCHEDULE_GRAPH=sch.dot
-export DEDUP_TASK_COMMANDS=false
-export DUMP_PE_PROGRAM=`pwd`/z
-# export LOAD_PE_PROGRAM=`pwd`/z
+# export DUMP_TENSOR=2 #TensorIndex
 
 ### run configs ###
 # export E2E_TEST_RUN_OPERATORWISE_TEST=1
@@ -153,21 +159,18 @@ export NPU_ARCH=nvp
 # export NPU_DEVNAME=npu1pe0-3,npu1pe4-7
 # export RUST_MIN_STACK=1073741824 # 1G
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-4chip.yml
-# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-2chip.yml
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-2chip.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
-# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
+# # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
-# export RUST_BACKTRACE=1
+export RUST_BACKTRACE=1
 # PACKAGE="-p npu-compiler"
 # PROFILE=fast-debug
 
-# export PERT_HW_NOTIFY_MAP=256
-# export ENABLE_POPULATOR_RECORD=1
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
 test(test_tactic_from_inferred_graph#)
-|test(test_dma_by_shape_)
+|test(test_gather_tactic_broadcast)
 ' -- --include-ignored
-
 
 
 ### gather ###

@@ -26,7 +26,8 @@
 			"label": "pert deploy",
 			"type": "shell",
 			"dependsOn": "dependency update",
-			"command": "python3 -m scripts.ci.rngd_ci.commands deploy-pert"
+			"command": "python3 -m ci.rngd_ci.commands deploy-pert"
+			// "command": "cargo run --release --bin libnpu-builder --no-default-features --features pert && aarch64-none-elf-objcopy -O binary target/pert pe_boot.bin && sudo furiosa_pert_deploy -d ${input:npu-id} -f pe_boot.bin && sudo sh -c 'echo performance > /sys/class/rngd_mgmt/rngd\\!${input:npu-id}mgmt/npu_governor'",
 		},
 		{
 			"label": "log clean up",
@@ -39,6 +40,11 @@
 			"type": "shell",
 			"dependsOn": "",
 			"command": "du -h --max-depth=3 ~ | sort -rh | head -n 10"
+		},
+		{
+			"label": "clippy fix",
+			"type": "shell",
+			"command": "cargo clippy --profile dev --all-targets --no-deps --fix -- -D warnings -D rust_2018_idioms"
 		}
 	],
 
