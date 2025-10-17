@@ -7,11 +7,7 @@ export LD_LIBRARY_PATH=`pwd`/target/release/deps
 # export NPU_GLOBAL_CONFIG_PATH=renegade-8pe
 # export NPU_DEVNAME=npu0pe0-3,npu0pe4-7
 export NPU_ARCH=nvp #renegade
-### Logs and Profiles ###
-# export DISABLE_PROFILER=1
-export NPU_PROFILER_PATH="profile.json"
-export TUC_PROFILE_LEVEL="debug"
-export ENABLE_PERT_PROFILE=1
+### Logs ###
 # export PERT_LOG=debug
 # export PERT_HW_NOTIFY_MAP=256
 # export NVP_LOG=info #debug
@@ -25,6 +21,11 @@ export TRACING_WITHOUT_TIME=1
 # export RUST_MIN_STACK=1073741824 # 1G
 # export RUST_BACKTRACE=1
 # export RUST_LIB_BACKTRACE=0 #skip lib crate backtrace for performance
+### Profiles ###
+# export DISABLE_PROFILER=1
+# export NPU_PROFILER_PATH="profile.json"
+# export TUC_PROFILE_LEVEL="debug"
+# export ENABLE_PERT_PROFILE=1
 ### E2E ###
 # export E2E_TEST_CACHE_STAGE=lir
 # export DUMP_GRAPHS=true
@@ -100,11 +101,11 @@ export TRACING_WITHOUT_TIME=1
 # ccc.dump()?;
 
 ##### c code #####
-# export DEDUP_TASK_COMMANDS=false
-# export DUMP_PE_PROGRAM=`pwd`/z
+export DEDUP_TASK_COMMANDS=false
+export DUMP_PE_PROGRAM=`pwd`/z
 # export LOAD_PE_PROGRAM=`pwd`/z
-# export NVP_LOG=debug
-# export NVP_LOG_STDOUT=1
+export NVP_LOG=debug
+export NVP_LOG_STDOUT=1
 # printf("L%d: ###\n", __LINE__);
 
 
@@ -146,7 +147,7 @@ PROFILE=dev
 # export NUM_DUMP_TACTICS=200
 # export E2E_TEST_CACHE_STAGE=ldfg
 # export DUMP_SCHEDULE_GRAPH=sch.dot
-# export DUMP_TENSOR=2 #TensorIndex
+# export DUMP_TENSOR=4 #TensorIndex
 
 ### run configs ###
 # export E2E_TEST_RUN_OPERATORWISE_TEST=1
@@ -160,15 +161,15 @@ PROFILE=dev
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-4chip.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-2chip.yml
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
-# # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
-export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
+# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
 export RUST_BACKTRACE=1
 # PACKAGE="-p npu-compiler"
 # PROFILE=release
 
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
 test(test_tactic_from_inferred_graph#)
-|test(test_rlir_loop_3)
+|test(test_rlir_loop_acc_scatter_2)
 ' -- --include-ignored
 
 

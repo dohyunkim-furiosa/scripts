@@ -162,14 +162,14 @@ export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-4chip.yml
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-2chip.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
 # # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
-# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
 export RUST_BACKTRACE=1
 # PACKAGE="-p npu-compiler"
 # PROFILE=fast-debug
 
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
 test(test_tactic_from_inferred_graph#)
-|test(test_gather_tactic_broadcast)
+|test(test_rlir_)
 ' -- --include-ignored
 
 
