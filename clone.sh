@@ -32,7 +32,7 @@ cp wolfrevo/tasks.json .vscode/tasks.json
 
 # install dependencies
 # source $HOME/venv/bin/activate
-pip3 install -r $HOME/npu-tools/tekton/build/requirements.txt
+pip3 install -r ci/tekton/build/requirements.txt
 dvc --cd artifacts/furiosa-libtorch/jammy pull -r origin -j 10
 cargo install cargo-sort --version=1.0.9 --locked --force
 cargo install cargo-nextest --locked --force

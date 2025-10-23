@@ -101,11 +101,11 @@ export TRACING_WITHOUT_TIME=1
 # ccc.dump()?;
 
 ##### c code #####
-export DEDUP_TASK_COMMANDS=false
-export DUMP_PE_PROGRAM=`pwd`/z
+# export DEDUP_TASK_COMMANDS=false
+# export DUMP_PE_PROGRAM=`pwd`/z
 # export LOAD_PE_PROGRAM=`pwd`/z
-export NVP_LOG=debug
-export NVP_LOG_STDOUT=1
+# export NVP_LOG=debug
+# export NVP_LOG_STDOUT=1
 # printf("L%d: ###\n", __LINE__);
 
 
@@ -159,17 +159,17 @@ PROFILE=dev
 # export NPU_DEVNAME=npu1pe0-3,npu1pe4-7
 # export RUST_MIN_STACK=1073741824 # 1G
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-4chip.yml
-# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-2chip.yml
-export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
-export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
+export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-2chip.yml
+# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
+# export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
-export RUST_BACKTRACE=1
+# export RUST_BACKTRACE=1
 # PACKAGE="-p npu-compiler"
 # PROFILE=release
 
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
 test(test_tactic_from_inferred_graph#)
-|test(test_rlir_loop_acc_scatter_2)
+|test(test_rlir_)
 ' -- --include-ignored
 
 

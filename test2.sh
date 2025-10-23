@@ -6,18 +6,14 @@ set -e
 export LD_LIBRARY_PATH=`pwd`/target/release/deps
 # export NPU_GLOBAL_CONFIG_PATH=renegade-8pe
 # export NPU_DEVNAME=npu0pe0-3,npu0pe4-7
-# export NPU_ARCH=renegade #nvp
-### Logs and Profiles ###
-# export DISABLE_PROFILER=1
-# export NPU_PROFILER_PATH="profile.json"
-# export TUC_PROFILE_LEVEL="debug"
-# export ENABLE_PERT_PROFILE=1
+export NPU_ARCH=nvp #renegade
+### Logs ###
 # export PERT_LOG=debug
 # export PERT_HW_NOTIFY_MAP=256
 # export NVP_LOG=info #debug
 # export NVP_LOG_STDOUT=1
 # export NVP_LOG_PATH=./nvp.log
-export NVP_MEMORY_INIT=2882400255 # 0xABCDEFFF, 4byte decimal
+# export NVP_MEMORY_INIT=2882400255 # 0xABCDEFFF, 4byte decimal
 # export NVP_CHROME_TRACING=1
 export RUST_LOG=info #tactic_populator=trace,npu_compiler::compile=trace,npu_compiler_dma::dma_estimator=debug
 export TRACING_WITHOUT_TIME=1
@@ -25,6 +21,11 @@ export TRACING_WITHOUT_TIME=1
 # export RUST_MIN_STACK=1073741824 # 1G
 # export RUST_BACKTRACE=1
 # export RUST_LIB_BACKTRACE=0 #skip lib crate backtrace for performance
+### Profiles ###
+# export DISABLE_PROFILER=1
+# export NPU_PROFILER_PATH="profile.json"
+# export TUC_PROFILE_LEVEL="debug"
+# export ENABLE_PERT_PROFILE=1
 ### E2E ###
 # export E2E_TEST_CACHE_STAGE=lir
 # export DUMP_GRAPHS=true
@@ -164,12 +165,14 @@ export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-2chip.yml
 # # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
 export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
 export RUST_BACKTRACE=1
-# PACKAGE="-p npu-compiler"
-# PROFILE=fast-debug
+PACKAGE="-p npu-compiler"
+# PROFILE=release
 
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
 test(test_tactic_from_inferred_graph#)
-|test(test_rlir_)
+|test(unittest_build_io_blocks)
+|test(unittest_find_overlapping)
+|test(unittest_build_io_blocks_2)
 ' -- --include-ignored
 
 

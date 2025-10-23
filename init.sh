@@ -23,7 +23,7 @@ else
     echo "$HOME/scripts already exist - clone skipped."
 fi
 chmod +x $HOME/scripts/*
-cp wolfrevo/.gitconfig $HOME/.gitconfig
+cp scripts/.gitconfig $HOME/.gitconfig
 
 # create softlinks
 # rm -rf $HOME/.cache
