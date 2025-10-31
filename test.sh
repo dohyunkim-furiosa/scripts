@@ -37,8 +37,6 @@ export TRACING_WITHOUT_TIME=1
 # export DUMP_TENSOR=1 #TensorIndex
 # export PRINT_ALL_TENSOR_BUFFERS=1
 # export DUMP_DIFF=1
-# export GENERATE_TEST_VECTORS=true
-# export NUM_SAMPLE=20
 # export FIR_TEST_BRIEF_DIFF=false
 # export SKIP_FIR_TEST=true
 # export SKIP_LIR_VERIFIER=true
@@ -52,6 +50,9 @@ export TRACING_WITHOUT_TIME=1
 # export DEDUP_TASK_COMMANDS=false
 # export DUMP_PE_PROGRAM=`pwd`/z
 # export LOAD_PE_PROGRAM=`pwd`/z
+### dma estimation test ###
+# export GENERATE_TEST_VECTORS=true
+# export NUM_SAMPLE=20
 ### Tactic Test ###
 # export TACTIC_PATH=`pwd`/serialized/PreLower_4764.yaml
 # export LOG_PATH=$PWD/test_compile_llama3_1_mlperf_latest_w8fa8f_decode_mid_block_b32_s2048/O63
@@ -101,8 +102,8 @@ export TRACING_WITHOUT_TIME=1
 # ccc.dump()?;
 
 ##### c code #####
-# export DEDUP_TASK_COMMANDS=false
-# export DUMP_PE_PROGRAM=`pwd`/z
+export DEDUP_TASK_COMMANDS=false
+export DUMP_PE_PROGRAM=`pwd`/z
 # export LOAD_PE_PROGRAM=`pwd`/z
 # export NVP_LOG=debug
 # export NVP_LOG_STDOUT=1
@@ -142,7 +143,7 @@ PROFILE=dev
 ### dump configs ###
 # export LOG_PATH=`pwd`/crates/npu-integration-test/log/tactic_test_scatter_oss_index_put
 # export TACTIC_ID=18
-# export TACTIC_PATH=`pwd`/PreLower_4297.yaml
+# export TACTIC_PATH=`pwd`/tactic.yaml
 # export SELECTED_SERIALIZED_TACTIC_PATH=`pwd`/tactics
 # export NUM_DUMP_TACTICS=200
 # export E2E_TEST_CACHE_STAGE=ldfg
@@ -163,18 +164,18 @@ export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-2chip.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
-# export RUST_BACKTRACE=1
-# PACKAGE="-p npu-compiler"
+export RUST_BACKTRACE=1
+# PACKAGE="-p npu-ir-common"
 # PROFILE=release
 
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
 test(test_tactic_from_inferred_graph#)
-|test(test_rlir_)
+|test(test_core_sym_expr_1)
 ' -- --include-ignored
 
 
 ### gather ###
-# |test(test_gather_tactic_small_)
+# |test(test_gather_tactic_split_0)
 # |test(codegen_test_tensor_dma_gather_)
 # |test(tactic_test_gather_small)
 # |test(tactic_test_gather_oss_bias)

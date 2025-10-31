@@ -56,12 +56,6 @@ mapfile -t VALUES < <(
   ' "temp_test/rngd_ci_model_tolerance.yaml"
 )
 
-if [ "${#VALUES[@]}" -eq 2 ]; then
-    ABS_TOLERANCE="${VALUES[0]}"
-    REL_TOLERANCE="${VALUES[1]}"
-else
-    ABS_TOLERANCE="$DEFAULT_ABS_TOLERANCE"
-    REL_TOLERANCE="$DEFAULT_REL_TOLERANCE"
-fi
 chmod +x temp_test/npu_runtime_test
 yes | zstd -d temp_test/*.zst
+

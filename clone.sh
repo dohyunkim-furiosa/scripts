@@ -36,6 +36,7 @@ pip3 install -r ci/tekton/build/requirements.txt
 dvc --cd artifacts/furiosa-libtorch/jammy pull -r origin -j 10
 cargo install cargo-sort --version=1.0.9 --locked --force
 cargo install cargo-nextest --locked --force
+cargo install cargo-machete --version=0.8.0 --locked --force
 
 echo "TODO:
 * Follow the instructions in https://github.com/furiosa-ai/npu-tools/blob/master/README.md

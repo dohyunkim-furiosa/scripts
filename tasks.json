@@ -20,6 +20,7 @@
 		{
 			"label": "ci trigger",
 			"type": "shell",
+			// --context dosan? --context aks-ci-jp?
 			"command": "python3 -m ci.tekton.run_pipeline ${input:commit-hash} ${input:ci-action}"
 		},
 		{
