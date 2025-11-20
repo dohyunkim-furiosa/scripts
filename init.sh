@@ -63,3 +63,8 @@ az login
 ############################################
 
 source $HOME/scripts/clone.sh npu-tools
+if [ ! -d "$HOME/device-runtime" ]; then
+    gh repo clone "https://github.com/furiosa-ai/device-runtime" -- --filter blob:none
+else
+    echo "$HOME/device-runtime already exists. Skipping cloning."
+fi

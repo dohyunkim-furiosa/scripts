@@ -7,7 +7,7 @@ else
     read NAME
 fi
 if [ ! -d "$HOME/$NAME" ]; then
-    gh repo clone --filter blob:none "https://github.com/dohyunkim-furiosa/npu-tools" $NAME
+    gh repo clone "https://github.com/dohyunkim-furiosa/npu-tools" $NAME -- --filter blob:none
 else
     echo "$HOME/$NAME already exists. Skipping cloning."
 fi

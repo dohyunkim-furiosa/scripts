@@ -1,8 +1,10 @@
 #!/bin/sh
 set -e
 # .git/hooks/pre-push
+
 cargo fmt --all -- --check
 ruff format --check --diff .
+python -c "from ci.tekton.src.check_bors_toml import check_bors_toml; check_bors_toml()"
 cargo sort --grouped --check --workspace
-cargo clippy --profile dev --all-targets --no-deps -- -D warnings -D rust_2018_idioms
+cargo clippy --all-targets --no-deps -- -D warnings -D rust_2018_idioms
 cargo machete

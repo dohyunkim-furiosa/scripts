@@ -10,7 +10,7 @@ export NPU_ARCH=nvp #renegade
 ### Logs ###
 # export PERT_LOG=debug
 # export PERT_HW_NOTIFY_MAP=256
-# export NVP_LOG=info #debug
+# export NVP_LOG=debug
 # export NVP_LOG_STDOUT=1
 # export NVP_LOG_PATH=./nvp.log
 # export NVP_MEMORY_INIT=2882400255 # 0xABCDEFFF, 4byte decimal
@@ -102,11 +102,11 @@ export TRACING_WITHOUT_TIME=1
 # ccc.dump()?;
 
 ##### c code #####
-export DEDUP_TASK_COMMANDS=false
-export DUMP_PE_PROGRAM=`pwd`/z
+# export DEDUP_TASK_COMMANDS=false
+# export DUMP_PE_PROGRAM=`pwd`/z
 # export LOAD_PE_PROGRAM=`pwd`/z
-# export NVP_LOG=debug
-# export NVP_LOG_STDOUT=1
+export NVP_LOG=debug
+export NVP_LOG_STDOUT=1
 # printf("L%d: ###\n", __LINE__);
 
 
@@ -164,19 +164,33 @@ export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-2chip.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-4pe.yml
 # export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade.yml
-export RUST_BACKTRACE=1
-# PACKAGE="-p npu-ir-common"
-# PROFILE=release
+# export RUST_BACKTRACE=1
+# PACKAGE="-p npu-compiler"
+# PACKAGE="-p tactic-populator"
+PROFILE=fast-debug
+PROFILE=release
 
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
 test(test_tactic_from_inferred_graph#)
-|test(test_core_sym_expr_1)
+|test(test_gather_tactic_small_1)
 ' -- --include-ignored
 
-
-### gather ###
+### gather testset ###
+## sparse
+# |test(test_gather_tactic_small_1)
 # |test(test_gather_tactic_split_0)
+# |test(test_gather_tactic_sparse_)
+# |test(test_gather_tactic_regression_1)
+# |test(multi_chip_test_gather_tactic_sparse_)
+# |test(tactic_test_gather_edge_cases_8)
+## split
+# |test(test_gather_tactic_small_1)
+# |test(test_gather_tactic_split_0)
+# |test(test_gather_tactic_sparse_)
+# codegen(non sparse)
 # |test(codegen_test_tensor_dma_gather_)
+# |test(test_core_sym)
+## tactic/proptest
 # |test(tactic_test_gather_small)
 # |test(tactic_test_gather_oss_bias)
 # |test(tactic_test_gather_oss_blocks)
