@@ -168,7 +168,6 @@ export NPU_GLOBAL_CONFIG_PATH=`pwd`/configs/renegade-8pe-2chip.yml
 # PACKAGE="-p npu-compiler"
 # PACKAGE="-p tactic-populator"
 PROFILE=fast-debug
-PROFILE=release
 
 cargo nextest run --nocapture --cargo-profile=$PROFILE $PACKAGE -E '
 test(test_tactic_from_inferred_graph#)
